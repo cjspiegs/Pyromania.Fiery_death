@@ -2619,8 +2619,8 @@ photo.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Time.point,
                     UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Treatment,
                     UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Tank,
                     UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$plant.mass..g,
-                    UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.DOC,
-                    100*(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.DOC)/((UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.DOC)), 
+                    UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L,
+                    100*(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L)/(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L), 
                      UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.TN,
                     100*(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.TN)/((UVBIO.df[UVBIO.df$Filt.UV=="Filtered.UV",]$Start.TN)),
                      suva.df[suva.df$Time.point=="T1",]$SUVA,
@@ -2646,10 +2646,16 @@ names(photo.df)[13]="HIX"
 names(photo.df)[14]="Fr"
 names(photo.df)[15]="FI"
 
+
 photo.df$mass.remaining.DOC=100-abs(photo.df[photo.df$effect=="UV-only",]$percent.change.DOC)
 photo.df$mass.remaining.TN=100-abs(photo.df[photo.df$effect=="UV-only",]$percent.change.TN)
 
+photo_t1.df=subset(photo.df, Time.point %in% c("T1"))
+
 photo.df=photo.df%>%
+    mutate_if(is.character,as.factor)
+
+photo_t1.df=photo_t1.df%>%
     mutate_if(is.character,as.factor)
 
 
@@ -2661,8 +2667,8 @@ microbe.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Time.point,
                       UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Treatment,
                       UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Tank,
                       UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$plant.mass..g,
-                    UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$DOC..mg.L- UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.DOC,
-                    100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.DOC)/(( UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.DOC)),
+                    UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$DOC..mg.L- UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L,
+                    100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L)/(( UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L)),
                      UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.TN,
                     100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.TN)/((UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.TN)),
                      suva.df[suva.df$Time.point=="T1",]$SUVA,
@@ -2690,10 +2696,13 @@ names(microbe.df)[15]="FI"
 microbe.df$mass.remaining.DOC=100-abs(microbe.df[microbe.df$effect=="microbes-only",]$percent.change.DOC)
 microbe.df$mass.remaining.TN=100-abs(microbe.df[microbe.df$effect=="microbes-only",]$percent.change.TN)
 
+microbe_t1.df=subset(microbe.df, Time.point %in% c("T1"))
+
 microbe.df=microbe.df%>%
     mutate_if(is.character,as.factor)
 
-
+microbe_t1.df=microbe_t1.df%>%
+    mutate_if(is.character,as.factor)
 #Total decomp= A
 total.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Time.point,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.DOC,
@@ -2701,8 +2710,8 @@ total.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Time.point,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Treatment,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Tank,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$plant.mass..g,
-                    UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.DOC,
-                     100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.DOC)/(abs(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.DOC)),
+                    UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L,
+                     100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$DOC..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L)/(abs(UVBIO.df[UVBIO.df$Filt.UV=="Filtered.NoUV",]$DOC..mg.L)),
                       UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.TN,
                      100*(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$TN..mg.L-UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.TN)/(abs(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.TN)),
                      suva.df[suva.df$Time.point=="T1",]$SUVA,
@@ -2730,8 +2739,12 @@ names(total.df)[15]="FI"
 total.df$mass.remaining.DOC=100-abs(total.df[total.df$effect=="UV and microbes",]$percent.change.DOC)
 total.df$mass.remaining.TN=100-abs(total.df[total.df$effect=="UV and microbes",]$percent.change.TN)
 
+total_t1.df=subset(total.df, Time.point %in% c("T1"))
 
 total.df=total.df%>%
+    mutate_if(is.character,as.factor)
+
+total_t1.df=total_t1.df%>%
     mutate_if(is.character,as.factor)
 #merge degra.df time points into one dataframe
 
@@ -2739,15 +2752,27 @@ total.df=total.df%>%
 degra.df=rbind(photo.df, microbe.df, total.df)
 degra.df=pivot_longer(degra.df, cols=c("effect"), names_to="effect", values_to="Type")
 
+degra_t1.df=rbind(photo_t1.df, microbe_t1.df, total_t1.df)
+degra_t1.df=pivot_longer(degra_t1.df, cols=c("effect"), names_to="effect", values_to="Type")
+
 #make sure we have factors
 degra.df=degra.df%>%
     mutate_if(is.character,as.factor)
+
+degra_t1.df=degra_t1.df%>%
+    mutate_if(is.character,as.factor)
+
+#seperate degra.df for burned and unburned tanks
+degra_t1.burned.df=degra_t1.df[degra_t1.df$Treatment=="burned",]
+degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
+
 
 ```
 
 
 UVBIO models and plots
 ```{r}
+library(mgcv)
 
 
 ###Just UV
@@ -2757,12 +2782,109 @@ m2.photo.perc=gam(percent.change.DOC ~ Treatment +s(plant.mass..g), data=photo.d
 
 m3.photo.perc=gam(percent.change.DOC ~ s(plant.mass..g), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
 
+burned.m1=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.burned.df, method = "REML",select= T)
+summary(burned.m1)
+
+unburned.m1=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.unburned.df, method = "REML",select= T)
+summary(unburned.m1)
+
+
+
+
+
+photo.df2 <- transform(photo.df, oTreatment = ordered(Treatment))
+levels(photo.df2$Treatment)
+
+burned.gam3=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.burned.df, method = "REML",select= T)
+
+gam3_diff=difference_smooths(burned.gam3, smooth = "s(plant.mass..g)", group_means=TRUE)
+gam3_diff
+xp=predict(burned.gam3, newdata= degra_t1.burned.df, type = "lpmatrix")
+
+
+## which cols of xp relate to splines of interest?
+c1 <- grepl('UV-only', colnames(xp))
+c2 <- grepl('micorbes-only', colnames(xp))
+## which rows of xp relate to sites of interest?
+r1 <- with(degra_t1.burned.df, Type == 'UV-only')
+r2 <- with(degra_t1.burned.df, Type == 'microbes-only')
+## difference rows of xp for data from comparison
+X <- xp[r1, ] - xp[r2, ]
+## zero out cols of X related to splines for other lochs
+X[, ! (c1 | c2)] <- 0
+## zero out the parametric cols
+X[, !grepl('^s\\(', colnames(xp))] <- 0
+
+
+dif <- X %*% coef(burned.gam3)
+
+se <- sqrt(rowSums((X %*% vcov(burned.gam3)) * X))
+crit <- qt(.975, df.residual(burned.gam3))
+upr <- dif + (crit * se)
+lwr <- dif - (crit * se)
+
+smooth_diff <- function(model, newdata, f1, f2, var, alpha = 0.05,
+                        unconditional = FALSE) {
+    xp <- predict(model, newdata = newdata, type = 'lpmatrix')
+    c1 <- grepl(f1, colnames(xp))
+    c2 <- grepl(f2, colnames(xp))
+    r1 <- newdata[[var]] == f1
+    r2 <- newdata[[var]] == f2
+    ## difference rows of xp for data from comparison
+    X <- xp[r1, ] - xp[r2, ]
+    ## zero out cols of X related to splines for other lochs
+    X[, ! (c1 | c2)] <- 0
+    ## zero out the parametric cols
+    X[, !grepl('^s\\(', colnames(xp))] <- 0
+    dif <- X %*% coef(model)
+    se <- sqrt(rowSums((X %*% vcov(model, unconditional = unconditional)) * X))
+    crit <- qt(alpha/2, df.residual(model), lower.tail = FALSE)
+    upr <- dif + (crit * se)
+    lwr <- dif - (crit * se)
+    data.frame(pair = paste(f1, f2, sep = '-'),
+               diff = dif,
+               se = se,
+               upper = upr,
+               lower = lwr)
+}
+
+comp1 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'UV-only', 'microbes-only', 'Type')
+comp2 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'UV-only', 'UV and microbes', 'Type')
+comp3 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'microbes-only', 'UV and microbes', 'Type')
+comp <- cbind(plant.mass..g = seq(0, 400, length = 15),
+              rbind(comp1, comp2, comp3))
+
+ggplot(comp, aes(x = plant.mass..g, y = diff, group = pair)) +
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+    geom_line() +
+    facet_wrap(~ pair, ncol = 2) +
+    coord_cartesian(ylim = c(-30,30)) +
+    labs(x = NULL, y = 'Difference in DOC trend')
+
+
+
+
+
+
+
+
+
+
+m1.photo.abs=gam(abs.change.DOC ~ Treatment +s(plant.mass..g, by= Treatment), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
+
+m2.photo.abs=gam(abs.change.DOC ~ Treatment +s(plant.mass..g), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
+
+m3.photo.abs=gam(abs.change.DOC ~ s(plant.mass..g), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
 photo.AIC=AIC(m1.photo.perc, m2.photo.perc, m3.photo.perc)
+photo.AIC=AIC(m1.photo.abs, m2.photo.abs, m3.photo.abs)
+
+
 photo.AIC
 # global smooth
 
-summary(m3.photo.perc)
+summary(m1.photo.perc)
 photo.anova=anova(m1.photo.perc)
+photo.anova
 gam.check(m3.photo.perc, rep=1000)
 draw(m3.photo.perc)
 concrvity(m3.photo.perc)
@@ -2773,18 +2895,21 @@ plot(m3.photo.perc, all.terms = TRUE, page=1)
 #plot for the model output on rawdata
 photo.mod.plot<-
   plot_smooths(
-  model = m3.photo.perc,
-  series = plant.mass..g
+  model = m1.photo.perc,
+  series = plant.mass..g,
+  comparison = Treatment
 ) + 
   geom_point(data=photo.df[(photo.df$Time.point=="T1"),], 
              aes(x=plant.mass..g, y=percent.change.DOC, color=Treatment)) +
    scale_color_manual(values = c("brown1", "mediumseagreen")) +
+  geom_hline(yintercept=0, linetype="longdash", color = "gray")+
   ggtitle("UV-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
-  coord_cartesian(ylim = c(-30,0))+
   xlab("plant material (g)") +
+    coord_cartesian(ylim = c(-40,10))+
   Fig.formatting
+ 
+
 
 photo.mod.plot
 
@@ -2819,9 +2944,11 @@ microbe.mod.plot<-
   ggtitle("microbes-only") +
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
-  coord_cartesian(ylim = c(-30,0))+
+   coord_cartesian(ylim = c(-40,10))+
   xlab("plant material (g)") +
   Fig.formatting
+
+ coord_cartesian(ylim = c(-30,0))
 
 
 microbe.mod.plot
@@ -2859,11 +2986,37 @@ total.mod.plot<-
   ggtitle("UV and microbes") +
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
-  coord_cartesian(ylim = c(-30,0))+
+  coord_cartesian(ylim = c(-40,10))+
   xlab("plant material (g)") +
   Fig.formatting
 
+
+
 total.mod.plot
+
+#compare difference between effect on DOC loss
+
+
+m1.loss.perc=gam(percent.change.DOC ~ Type +s(plant.mass..g, by= Type), data=degra.df, method="REML", select= T, subset= Time.point=="T1")
+gam.check(m1.loss.perc, rep=1000)
+draw(m1.loss.perc)
+m1.loss.aov=anova(m1.loss.perc)
+m1.loss.aov
+summary(m1.loss.perc)
+TukeyHSD(m1.loss.aov)
+plot_difference(m1.loss.perc)
+
+
+
+
+degra.df2 <- transform(degra.df, oTreatment = ordered(Treatment))
+levels(degra.df2$Treatment)
+
+gam3 <- gam(percent.change.DOC ~ oType + s(plant.mass..g, by = oType),
+            data = degra.df2, method = "ML")
+
+levels(degra.df2$oType)
+summary(gam3)
 
 ##combine AIC
 mod.degra.rep<-rep(c("UV-only: Treatment with by-factor smooth", 
@@ -2943,6 +3096,10 @@ dev.off()
 
 compile raw plots and model-diff plots for final figures
 ```{r DOC model plots compiled}
+fsdfsd
+mean(microbe_t1.df[microbe_t1.df$plant.mass..g<="75" & microbe_t1.df$plant.mass..g>="275",]$percent.change.DOC)
+
+mean(microbe_t1.df[microbe_t1.df$plant.mass..g>="150" & microbe_t1.df$plant.mass..g<="250",]$percent.change.DOC)
 
 degra.mod.plot<-plot_grid(
 photo.mod.plot+ theme(legend.position = "none"),
@@ -2951,6 +3108,24 @@ microbe.mod.plot+ theme(legend.position = "none"), extract.legend,
   rel_widths = c(8,8,8,3), ncol=4)
 
 degra.mod.plot
+
+ggplot(degra_t1.df, aes(x= plant.mass..g, y=percent.change.DOC, linetype=Treatment, color=Type, fill=Type))+
+  geom_point()+
+ scale_color_manual(values = c("gold", "magenta", "cornflowerblue")) + 
+   scale_fill_manual(values = c("gold", "magenta", "cornflowerblue")) +
+  geom_smooth(method = "gam", formula = y~s(x))+
+   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
+  facet_grid(~Treatment)+
+  Fig.formatting.boxplot
+
+ggplot(degra_t1.df, aes(x= plant.mass..g, y=percent.change.DOC, linetype=Treatment, color=Treatment, fill=Treatment))+
+  geom_point(alpha=0.4)+
+ scale_color_manual(values = c("brown1", "mediumseagreen")) +
+   scale_fill_manual(values = c("brown1", "mediumseagreen")) +
+  geom_smooth(method = "gam", formula = y~s(x))+
+   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
+  facet_grid(Treatment~Type)+
+  Fig.formatting.boxplot
 
 ggsave("figures/degra.mod.plot.pdf", height=4, width=12)
 
@@ -2967,7 +3142,7 @@ m2.suva.photo=gam(percent.change.DOC ~ Treatment +s(SUVA), data=photo.df, method
 m3.suva.photo=gam(percent.change.DOC ~ s(SUVA), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
 
 photo.suva.AIC=AIC(m1.suva.photo, m2.suva.photo, m3.suva.photo)
-
+photo.suva.AIC
 photo.suva.anova=anova(m1.suva.photo)
 photo.suva.anova
 
@@ -2984,9 +3159,17 @@ photo.suva.plot=plot_smooths(
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
 xlab(expression('SUVA'["254"]~'(mgC'~ L^-1~m^-1*')'))+
-  coord_cartesian(ylim = c(-30,0))+
+
   Fig.formatting
+
+ggplot(DOC.df, aes(x=DOC..mg.L, y=SUVA, fill=Treatment, color=Treatment))+
+  geom_point()+
+  geom_smooth(method = "gam", formula = y~s(x))+
+facet_grid(~Time.point, scales = "free")
+
  photo.suva.plot
+ 
+ 
 
 ###Decomposition across SUVA for microbes
 m1.suva.microbes=gam(percent.change.DOC ~ Treatment +s(SUVA, by= Treatment), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
@@ -2996,7 +3179,7 @@ m2.suva.microbes=gam(percent.change.DOC ~ Treatment +s(SUVA), data=microbe.df, m
 m3.suva.microbes=gam(percent.change.DOC ~ s(SUVA), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
 
 microbe.suva.AIC=AIC(m1.suva.microbes, m2.suva.microbes, m3.suva.microbes)
-
+microbe.suva.AIC
 microbe.suva.anova=anova(m1.suva.microbes)
 summary(m3.suva.microbes)
 # global smooth
@@ -3012,8 +3195,9 @@ microbe.suva.plot=plot_smooths(
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("") +
 xlab(expression('SUVA'["254"]~'(mgC'~ L^-1~m^-1*')'))+
-  coord_cartesian(ylim = c(-30,0))+
+
   Fig.formatting
+  coord_cartesian(ylim = c(-30,0))
   
 microbe.suva.plot
   ###Decomposition across SUVA for microbes
@@ -3024,6 +3208,7 @@ m2.suva.total=gam(percent.change.DOC ~ Treatment +s(SUVA), data=total.df, method
 m3.suva.total=gam(percent.change.DOC ~ s(SUVA), data=total.df, method="REML", select= T, subset= Time.point=="T1")
 
 total.suva.AIC=AIC(m1.suva.total, m2.suva.total, m3.suva.total)
+total.suva.AIC
 total.suva.anova=anova(m1.suva.total)
 
 # global smooth
@@ -3905,6 +4090,132 @@ nrow=2)
 all.decomp.mod.plot
 
 ggsave("figures/all.decomp.mod.plot.pdf", height=8, width=8)
+
+```
+
+Amend numeric gradient to categorical factors (low/med/high plant biomass) for ANOVA
+
+```{r}
+
+#make a copy of existing DOC dataframe
+DOC.df2=data.frame(DOC.df)
+DOC.df2=DOC.df2[-(1:32),]
+
+#add categorical low/med/high biomass
+DOC.df2$plant.level=as.factor(ifelse(DOC.df2$plant.mass..g<=75, "Low",
+  ifelse (DOC.df2$plant.mass..g>=225, "High", "Medium"))) 
+#calculate group mean                                    
+DOC.df2$mean=ave(DOC.df2$DOC..mg.L, DOC.df2$plant.level)  
+#reorder levels
+DOC.df2$plant.level <- factor(DOC.df2$plant.level, levels = c("Low", "Medium","High"))
+levels(DOC.df2$plant.level)
+
+#new plot format
+Fig.formatting.boxplot<-(theme_classic()) +
+  theme(text=element_text(size=14),
+        legend.text.align = 0,
+        panel.border = element_rect(fill=NA, colour = "black", size=1),
+        aspect.ratio=1, 
+        axis.ticks.length=unit(0.25, "cm"),
+        axis.text.y=element_text(
+        margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm"), colour="black", size=12), 
+        axis.text.x=element_text(
+        margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm"), colour="black", size=12)) +
+  theme(legend.key.size = unit(0.4, "cm")) +
+  theme(aspect.ratio=1.3) +
+  theme(panel.spacing=unit(c(0), "pt"))
+
+#plot
+plot.mean_labels <- c(
+                    `T1` = "Day-10",
+                    `T2` = "Day-31",
+                    `T3` = "Day-59",
+                    `T4` = "Day-89"
+                    )
+
+p=ggplot(DOC.df2, aes(x=plant.level, y=sr, fill=Treatment)) + 
+  geom_boxplot()+
+  facet_grid(~Time.point,  labeller = as_labeller(plot.mean_labels))+
+  Fig.formatting.boxplot+
+  scale_color_manual(values = c("brown1", "mediumseagreen")) + 
+  scale_fill_manual(values = c("brown1", "mediumseagreen")) +
+  ylab("DOC (mg/L)") +
+  xlab("plant biomass categories")
+
+p 
+
+DOC.df2 %>%
+  ggplot( aes(x=plant.level, y=hix, fill=Treatment)) +
+    geom_boxplot() +
+    theme(
+      legend.position="none",
+      plot.title = element_text(size=11)
+    ) +
+    ggtitle("Basic boxplot") +
+    xlab("")+
+     geom_jitter(color="black", size=0.4, alpha=0.9) +
+  facet_grid(~Time.point)+
+  Fig.formatting.boxplot
+
+
+library("ggpubr")
+ggline(DOC.df2, x = "plant.level", y = "DOC..mg.L", 
+       add = c("mean_se", "jitter"), 
+       order = c("Low", "Medium", "High"),
+       ylab = "DOC (mg/L)", xlab = "Category")
+
+```
+ANOVA of DOC
+
+```{r}
+#subset dataframe for analysis
+DOC.df2_T1=data.frame(DOC.df2[DOC.df2$Time.point=="T1",])
+DOC.df2_T2=data.frame(DOC.df2[DOC.df2$Time.point=="T2",])
+DOC.df2_T3=data.frame(DOC.df2[DOC.df2$Time.point=="T3",])
+DOC.df2_T4=data.frame(DOC.df2[DOC.df2$Time.point=="T4",])
+
+# Compute the analysis of variance Time 1
+aov.m1_T1.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T1)
+aov.m1_T1.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T1)
+aov.m1_T1.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T1)
+# Summary of the analysis
+summary(aov.m1_T1.high)
+plot(aov.m1_T1.med)
+
+# Compute the analysis of variance Time 2
+aov.m1_T2.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T2)
+aov.m1_T2.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T2)
+aov.m1_T2.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T2)
+# Summary of the analysis
+summary(aov.m1_T2.med)
+summary(aov.m1_T2.med)
+summary(aov.m1_T2.high)
+plot(aov.m1_T2.med)
+
+
+# Compute the analysis of variance Time 3
+aov.m1_T3.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T3)
+aov.m1_T3.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T3)
+aov.m1_T3.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T3)
+# Summary of the analysis
+summary(aov.m1_T3.high)
+plot(aov.m1_T1.med)
+
+
+# Compute the analysis of variance Time 4
+aov.m1_T4.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T4)
+aov.m1_T4.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T4)
+aov.m1_T4.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T4)
+# Summary of the analysis
+summary(aov.m1_T4.high)
+plot(aov.m1_T4.high)
+
+
+interaction <- aov(yield ~ fertilizer * density, data = crop.data)
+
+
+
+
 
 ```
 
