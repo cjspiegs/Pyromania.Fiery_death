@@ -1,6 +1,6 @@
 ---
-title: "Pyromania"
-author: "CJ Spiegel"
+title: "Pyromania—Life after a fiery death: fire and plant biomass loading affect dissolved organic matter in experimental ponds"
+author: "CJ Spiegel et al. 2023, in review Global Change Biology"
 date: "1/4/2021"
 output:
   html_document:
@@ -13,7 +13,7 @@ output:
     toc_depth: '4'
 ---
 ### Project overview
-The goal of the Pyromania project is to test how terrestrial subsides (plant biomass loading) and burning influence aquatic productivity, trophic transfer, and water quality/chemistry. We used a manipulative experiment to assess a range of plant material quantities (0-400g/tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic mesocosms and ran the experiment for ~90d in 2021-2022.  
+The goal of the Pyromania project is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic mesocosms and ran the experiment for ~90d in 2021-2022.   
 
 
 
@@ -21,9 +21,17 @@ The goal of the Pyromania project is to test how terrestrial subsides (plant bio
 This data set is among 3 to be generated for the project and focuses on:  
 
 (1) **dissolved organic carbon** (DOC) and  
-(2) **Fluorescence and UV-vis absorbance** indices  
+(2) **Fluorescence and UV-vis spectroscopic absorbance** indices  
 (3) **DOC Degradation** from either photo- or microbial decomposition 
-(4) **burning effects on plant material decomposition** using % mass loss
+(4) **plant biomass decomposition** as % mass loss
+
+**TIME POINTS**  
+
+* Time-0 (**T0**) = before the addition of plant materials, plankton were stocked at this stage  
+* Time-1 (**T1**) = 10 days after the addition of plant materials  
+* Time-2 (**T2**) = 31 days after ...  
+* Time-3 (**T3**) = 59 days after ...  
+* Time-4 (**T4**) = 89 days after ...  
 
 ```{r setup chunk, setup, include = FALSE, cache=FALSE, message=FALSE, warning=FALSE}
 if (!require('knitr')) install.packages('knitr'); library('knitr')
@@ -110,12 +118,10 @@ DOC.df<- DOC.df %>%
 
 DOC.df$Treatment<-as.factor(DOC.df$Treatment)
 ```
-
 DOC analysis: 
 
 - notes on GAMS....
-Note that fitting via restricted maximum likelihood (REML) is advised to give stable results. Fitting the smoothing parameter (sp) to user defined levels not advisable (but certainly is done). 
-Number of basis functions important as well, small # of basis functions (k) will limit wiggliness (and make the model more linear than should be). This wiggliness is set by using the k values. Don't want too high, or too low... 
+Note that fitting via restricted maximum likelihood (REML) is advised to give stable results. Fitting the smoothing parameter (sp) to user defined levels not advisable (but certainly is done). Number of basis functions important as well, small # of basis functions (k) will limit wiggliness (and make the model more linear than should be). This wiggliness is set by using the k values. Don't want too high, or too low... 
 
 When using the non-linear smoothing, this is the s(xxxx). Can add a new predictor by adding another smooth function with s(x1) + s(x2). When the variable is inside the smooth function, this is to account for the nonlinear shape. Two smoothing together and you have ADDITIVE Nonlinear modeling. Not all variables need to be non-linear, but adding a predictor outside of the s() then this is allowing for linearity. 
 
@@ -125,7 +131,7 @@ Factor-smooth interaction also an option, this is when s(x1 by = fac), this sets
 
 EDF - effective degrees of freedom, equate with wiggliness, with edf =1 as a straight line, and higher edfs as more wiggly. GAM smoother significance is described as not being able to draw a horizontal line through the data. Always check concurvity, which is the collinearity with models from 0-1.
 
-```{r DOC analysis and individual plots}
+```{rDOC analysis and individual plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 ######## T0 model
 m1.DOC.T0.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -429,7 +435,8 @@ dev.off()
 ```
 
 DOC: compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
+```{r DOC all figures, fig.dim=c(13,5), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
+###### compile the plots with effect plots}
 
 extract.legend <- get_legend(
   # create some space to the left of the legend
@@ -444,7 +451,11 @@ DOC.alltimes<-plot_grid(
   rel_widths = c(8,8,8,8,3), ncol=5)
 
 ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=12)
+DOC.alltimes
+```
 
+
+```{r DOC mod diffs, fig.dim=c(12,3), fig.cap="**Figure**. Model effects from GAMs with differences between smoothers for DOC concentration across time in treatments receiving burned and unburned plant material. The areas in pink show where there are significant differences between the two smoothers, indicating treatment effects."}
 DOC.mod.diffs<-plot_grid(
   DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("DOC - Day-10"),
   DOC.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
