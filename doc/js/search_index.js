@@ -1,0 +1,1 @@
+var search_data = {"index":{"searchIndex":["chunk-code-e38f658ed2be"],"longSearchIndex":[""],"info":[["chunk-code-e38f658ed2be","","__/__/__/__/__/var/folders/x_/mg86wc7j11z_s7f4dh97s3340000gp/T/RtmpE1a6NG/chunk-code-e38f658ed2be_txt.html","","<p>######## T0 model m1.DOC.T0.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = …\n"]]}}

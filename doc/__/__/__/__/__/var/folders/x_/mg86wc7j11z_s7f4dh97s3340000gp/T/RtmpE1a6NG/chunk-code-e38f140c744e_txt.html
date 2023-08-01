@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>chunk-code-e38f140c744e - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../../../../../../../../../../";
+  var index_rel_prefix = "../../../../../../../../../../../";
+</script>
+
+<script src="../../../../../../../../../../../js/navigation.js" defer></script>
+<script src="../../../../../../../../../../../js/search.js" defer></script>
+<script src="../../../../../../../../../../../js/search_index.js" defer></script>
+<script src="../../../../../../../../../../../js/searcher.js" defer></script>
+<script src="../../../../../../../../../../../js/darkfish.js" defer></script>
+
+<link href="../../../../../../../../../../../css/fonts.css" rel="stylesheet">
+<link href="../../../../../../../../../../../css/rdoc.css" rel="stylesheet">
+
+
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../../../../../../../../../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../../../../../../../../../../table_of_contents.html#pages">Pages</a>
+    <a href="../../../../../../../../../../../table_of_contents.html#classes">Classes</a>
+    <a href="../../../../../../../../../../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../../../../../../../../../../../__/__/__/__/__/var/folders/x_/mg86wc7j11z_s7f4dh97s3340000gp/T/RtmpE1a6NG/chunk-code-e38f140c744e_txt.html">chunk-code-e38f140c744e</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page ../../../../../var/folders/x_/mg86wc7j11z_s7f4dh97s3340000gp/T/RtmpE1a6NG/chunk-code-e38f140c744e.txt">
+
+<p>######## T0 model m1.DOC.T0.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point==“T0”, data = DOC.df, method = “REML”)</p>
+
+<p>m2.DOC.T0.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point==“T0”, data = DOC.df, method = “REML”)</p>
+
+<p>m3.DOC.T0.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point==“T0”, data = DOC.df, method = “REML”)</p>
+
+<p>T0.DOC.AIC&lt;-AIC(m1.DOC.T0.gam, m2.DOC.T0.gam, m3.DOC.T0.gam) T0.DOC.AIC # best is smoother solo</p>
+
+<p>DOC.sum_T0=summary(m3.DOC.T0.gam) DOC.sum_T0=anova.gam(m3.DOC.T0.gam) gam.check(m3.DOC.T0.gam, rep=1000) draw(m3.DOC.T0.gam) concrvity(m3.DOC.T0.gam) par(mfrow = c(2, 2)) plot(m3.DOC.T0.gam, all.terms = TRUE, page=1)</p>
+
+<p>DOC.diff.T0&lt;-plot_difference(</p>
+
+<pre class="ruby"><span class="ruby-identifier">m1</span>.<span class="ruby-constant">DOC</span>.<span class="ruby-constant">T0</span>.<span class="ruby-identifier">gam</span>,
+<span class="ruby-identifier">series</span> = <span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>,
+<span class="ruby-identifier">difference</span> = <span class="ruby-identifier">list</span>(<span class="ruby-constant">Treatment</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;burned&quot;</span>, <span class="ruby-string">&quot;unburned&quot;</span>))
+</pre>
+
+<p>)</p>
+
+<p>###########</p>
+
+<p>plot for the model output on rawdata DOC.T0.mod.plot&lt;-</p>
+
+<pre>plot_smooths(
+model = m3.DOC.T0.gam,
+series = plant.mass..g</pre>
+
+<p>) + </p>
+
+<pre class="ruby"><span class="ruby-identifier">geom_point</span>(<span class="ruby-identifier">data</span>=<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span>[(<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span><span class="ruby-identifier">$Time</span>.<span class="ruby-identifier">point</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;T0&quot;</span>),], 
+           <span class="ruby-identifier">aes</span>(<span class="ruby-identifier">x</span>=<span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>, <span class="ruby-identifier">y</span>=<span class="ruby-constant">DOC</span><span class="ruby-operator">..</span><span class="ruby-identifier">mg</span>.<span class="ruby-constant">L</span>, <span class="ruby-identifier">color</span>=<span class="ruby-constant">Treatment</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">scale_color_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span> 
+<span class="ruby-identifier">scale_fill_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span>=<span class="ruby-identifier">c</span>(<span class="ruby-value">0</span>, <span class="ruby-value">5</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ggtitle</span>(<span class="ruby-string">&quot;Day-0&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ylab</span>(<span class="ruby-string">&quot;DOC (mg/L)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">xlab</span>(<span class="ruby-string">&quot;plant material (g)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>DOC.T0.mod.plot</p>
+
+<p>######## T1 model m1.DOC.T1.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point==“T1”, data = DOC.df, method = “REML”)</p>
+
+<p>m2.DOC.T1.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point==“T1”, data = DOC.df, method = “REML”)</p>
+
+<p>m3.DOC.T1.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point==“T1”, data = DOC.df, method = “REML”)</p>
+
+<p>T1.DOC.AIC&lt;-AIC(m1.DOC.T1.gam, m2.DOC.T1.gam, m3.DOC.T1.gam) T1.DOC.AIC # best is smooth by factor</p>
+
+<p>summary(m1.DOC.T1.gam) T1.DOC.anova=anova(m1.DOC.T1.gam) gam.check(m1.DOC.T1.gam, rep=1000) draw(m1.DOC.T1.gam) concrvity(m1.DOC.T1.gam) par(mfrow = c(2, 2)) plot(m1.DOC.T1.gam, all.terms = TRUE, page=1)</p>
+
+<p># model predictions DOC.diff.T1&lt;-plot_difference(</p>
+
+<pre class="ruby"><span class="ruby-identifier">m1</span>.<span class="ruby-constant">DOC</span>.<span class="ruby-constant">T1</span>.<span class="ruby-identifier">gam</span>,
+<span class="ruby-identifier">series</span> = <span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>,
+<span class="ruby-identifier">difference</span> = <span class="ruby-identifier">list</span>(<span class="ruby-constant">Treatment</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;burned&quot;</span>, <span class="ruby-string">&quot;unburned&quot;</span>))
+</pre>
+
+<p>)+</p>
+
+<pre class="ruby"><span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span> = <span class="ruby-identifier">c</span>(<span class="ruby-value">-10</span>,<span class="ruby-value">13</span>))<span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>###########</p>
+
+<p>plot for the model output on rawdata DOC.T1.mod.plot&lt;-</p>
+
+<pre>plot_smooths(
+model = m1.DOC.T1.gam,
+series = plant.mass..g,
+comparison = Treatment</pre>
+
+<p>) + </p>
+
+<pre class="ruby"><span class="ruby-identifier">geom_point</span>(<span class="ruby-identifier">data</span>=<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span>[(<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span><span class="ruby-identifier">$Time</span>.<span class="ruby-identifier">point</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;T1&quot;</span>),], 
+           <span class="ruby-identifier">aes</span>(<span class="ruby-identifier">x</span>=<span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>, <span class="ruby-identifier">y</span>=<span class="ruby-constant">DOC</span><span class="ruby-operator">..</span><span class="ruby-identifier">mg</span>.<span class="ruby-constant">L</span>, <span class="ruby-identifier">color</span>=<span class="ruby-constant">Treatment</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">scale_color_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span> 
+<span class="ruby-identifier">scale_fill_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span>=<span class="ruby-identifier">c</span>(<span class="ruby-value">0</span>, <span class="ruby-value">60</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ggtitle</span>(<span class="ruby-string">&quot;Day-10&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ylab</span>(<span class="ruby-string">&quot;DOC (mg/L)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">xlab</span>(<span class="ruby-string">&quot;plant material (g)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>########## T2 m1.DOC.T2.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point==“T2”, data = DOC.df, method = “REML”)</p>
+
+<p>m2.DOC.T2.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point==“T2”, data = DOC.df, method = “REML”)</p>
+
+<p>m3.DOC.T2.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point==“T2”, data = DOC.df, method = “REML”)</p>
+
+<p>T2.DOC.AIC&lt;-AIC(m1.DOC.T2.gam, m2.DOC.T2.gam, m3.DOC.T2.gam) T2.DOC.AIC # best is smooth by factor</p>
+
+<p>summary(m1.DOC.T2.gam) T2.DOC.anova=anova.gam(m1.DOC.T2.gam) gam.check(m1.DOC.T2.gam, rep=1000) draw(m1.DOC.T2.gam) concrvity(m1.DOC.T2.gam) par(mfrow = c(2, 2)) plot(m1.DOC.T2.gam, all.terms = TRUE, page=1)</p>
+
+<p># model predictions DOC.diff.T2&lt;-plot_difference(</p>
+
+<pre class="ruby"><span class="ruby-identifier">m1</span>.<span class="ruby-constant">DOC</span>.<span class="ruby-constant">T2</span>.<span class="ruby-identifier">gam</span>,
+<span class="ruby-identifier">series</span> = <span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>,
+<span class="ruby-identifier">difference</span> = <span class="ruby-identifier">list</span>(<span class="ruby-constant">Treatment</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;burned&quot;</span>, <span class="ruby-string">&quot;unburned&quot;</span>))
+</pre>
+
+<p>)+</p>
+
+<pre class="ruby"><span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span> = <span class="ruby-identifier">c</span>(<span class="ruby-value">-10</span>,<span class="ruby-value">13</span>))<span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>###########</p>
+
+<p>plot for the model output on rawdata DOC.T2.mod.plot&lt;-</p>
+
+<pre>plot_smooths(
+model = m1.DOC.T2.gam,
+series = plant.mass..g,
+comparison = Treatment</pre>
+
+<p>) + </p>
+
+<pre class="ruby"><span class="ruby-identifier">geom_point</span>(<span class="ruby-identifier">data</span>=<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span>[(<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span><span class="ruby-identifier">$Time</span>.<span class="ruby-identifier">point</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;T2&quot;</span>),], 
+           <span class="ruby-identifier">aes</span>(<span class="ruby-identifier">x</span>=<span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>, <span class="ruby-identifier">y</span>=<span class="ruby-constant">DOC</span><span class="ruby-operator">..</span><span class="ruby-identifier">mg</span>.<span class="ruby-constant">L</span>, <span class="ruby-identifier">color</span>=<span class="ruby-constant">Treatment</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">scale_color_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span> 
+  <span class="ruby-identifier">scale_fill_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span>=<span class="ruby-identifier">c</span>(<span class="ruby-value">0</span>, <span class="ruby-value">60</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ggtitle</span>(<span class="ruby-string">&quot;Day-31&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ylab</span>(<span class="ruby-string">&quot;DOC (mg/L)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">xlab</span>(<span class="ruby-string">&quot;plant material (g)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>########## T3 m1.DOC.T3.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point==“T3”, data = DOC.df, method = “REML”)</p>
+
+<p>m2.DOC.T3.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point==“T3”, data = DOC.df, method = “REML”)</p>
+
+<p>m3.DOC.T3.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point==“T3”, data = DOC.df, method = “REML”)</p>
+
+<p>T3.DOC.AIC&lt;-AIC(m1.DOC.T3.gam, m2.DOC.T3.gam, m3.DOC.T3.gam) T3.DOC.AIC # best by factor smooth</p>
+
+<p>summary(m1.DOC.T3.gam) T3.DOC.anova=anova.gam(m1.DOC.T3.gam) gam.check(m1.DOC.T3.gam, rep=1000) draw(m1.DOC.T3.gam) concrvity(m1.DOC.T3.gam) par(mfrow = c(2, 2)) plot(m1.DOC.T3.gam, all.terms = TRUE, page=1)</p>
+
+<p># model predictions DOC.diff.T3&lt;-plot_difference(</p>
+
+<pre class="ruby"><span class="ruby-identifier">m1</span>.<span class="ruby-constant">DOC</span>.<span class="ruby-constant">T3</span>.<span class="ruby-identifier">gam</span>,
+<span class="ruby-identifier">series</span> = <span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>,
+<span class="ruby-identifier">difference</span> = <span class="ruby-identifier">list</span>(<span class="ruby-constant">Treatment</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;burned&quot;</span>, <span class="ruby-string">&quot;unburned&quot;</span>))
+</pre>
+
+<p>)+</p>
+
+<pre class="ruby"><span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span> = <span class="ruby-identifier">c</span>(<span class="ruby-value">-10</span>,<span class="ruby-value">13</span>))<span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>###########</p>
+
+<p>plot for the model output on rawdata DOC.T3.mod.plot&lt;-</p>
+
+<pre>plot_smooths(
+model = m1.DOC.T3.gam,
+series = plant.mass..g,
+comparison = Treatment</pre>
+
+<p>) + </p>
+
+<pre class="ruby"><span class="ruby-identifier">geom_point</span>(<span class="ruby-identifier">data</span>=<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span>[(<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span><span class="ruby-identifier">$Time</span>.<span class="ruby-identifier">point</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;T3&quot;</span>),], 
+           <span class="ruby-identifier">aes</span>(<span class="ruby-identifier">x</span>=<span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>, <span class="ruby-identifier">y</span>=<span class="ruby-constant">DOC</span><span class="ruby-operator">..</span><span class="ruby-identifier">mg</span>.<span class="ruby-constant">L</span>, <span class="ruby-identifier">color</span>=<span class="ruby-constant">Treatment</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">scale_color_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span> 
+  <span class="ruby-identifier">scale_fill_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span>=<span class="ruby-identifier">c</span>(<span class="ruby-value">0</span>, <span class="ruby-value">60</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ggtitle</span>(<span class="ruby-string">&quot;Day-59&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ylab</span>(<span class="ruby-string">&quot;DOC (mg/L)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">xlab</span>(<span class="ruby-string">&quot;plant material (g)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>########## T4 m1.DOC.T4.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point==“T4”, data = DOC.df, method = “REML”)</p>
+
+<p>m2.DOC.T4.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point==“T4”, data = DOC.df, method = “REML”)</p>
+
+<p>m3.DOC.T4.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point==“T4”, data = DOC.df, method = “REML”)</p>
+
+<p>T4.DOC.AIC&lt;-AIC(m1.DOC.T4.gam, m2.DOC.T4.gam, m3.DOC.T4.gam) T4.DOC.AIC # best is global summary(m3.DOC.T4.gam) T4.DOC.anova=anova(m1.DOC.T4.gam) gam.check(m3.DOC.T4.gam, rep=1000) draw(m3.DOC.T4.gam) concrvity(m3.DOC.T4.gam) par(mfrow = c(2, 2)) plot(m3.DOC.T4.gam, all.terms = TRUE, page=1)</p>
+
+<p>###########</p>
+
+<p>plot for the model output on rawdata DOC.T4.mod.plot&lt;-</p>
+
+<pre>plot_smooths(
+model = m3.DOC.T4.gam,
+series = plant.mass..g</pre>
+
+<p>) + </p>
+
+<pre class="ruby"><span class="ruby-identifier">geom_point</span>(<span class="ruby-identifier">data</span>=<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span>[(<span class="ruby-constant">DOC</span>.<span class="ruby-identifier">df</span><span class="ruby-identifier">$Time</span>.<span class="ruby-identifier">point</span><span class="ruby-operator">==</span><span class="ruby-string">&quot;T4&quot;</span>),], 
+           <span class="ruby-identifier">aes</span>(<span class="ruby-identifier">x</span>=<span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>, <span class="ruby-identifier">y</span>=<span class="ruby-constant">DOC</span><span class="ruby-operator">..</span><span class="ruby-identifier">mg</span>.<span class="ruby-constant">L</span>, <span class="ruby-identifier">color</span>=<span class="ruby-constant">Treatment</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">scale_color_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span> 
+  <span class="ruby-identifier">scale_fill_manual</span>(<span class="ruby-identifier">values</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;brown1&quot;</span>, <span class="ruby-string">&quot;mediumseagreen&quot;</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span>=<span class="ruby-identifier">c</span>(<span class="ruby-value">0</span>, <span class="ruby-value">60</span>)) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ggtitle</span>(<span class="ruby-string">&quot;Day-89&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">ylab</span>(<span class="ruby-string">&quot;DOC (mg/L)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-identifier">xlab</span>(<span class="ruby-string">&quot;plant material (g)&quot;</span>) <span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p># model predictions DOC.diff.T4&lt;-plot_difference(</p>
+
+<pre class="ruby"><span class="ruby-identifier">m1</span>.<span class="ruby-constant">DOC</span>.<span class="ruby-constant">T4</span>.<span class="ruby-identifier">gam</span>,
+<span class="ruby-identifier">series</span> = <span class="ruby-identifier">plant</span>.<span class="ruby-identifier">mass</span><span class="ruby-operator">..</span><span class="ruby-identifier">g</span>,
+<span class="ruby-identifier">difference</span> = <span class="ruby-identifier">list</span>(<span class="ruby-constant">Treatment</span> = <span class="ruby-identifier">c</span>(<span class="ruby-string">&quot;burned&quot;</span>, <span class="ruby-string">&quot;unburned&quot;</span>))
+</pre>
+
+<p>)+</p>
+
+<pre class="ruby"><span class="ruby-identifier">coord_cartesian</span>(<span class="ruby-identifier">ylim</span> = <span class="ruby-identifier">c</span>(<span class="ruby-value">-10</span>,<span class="ruby-value">13</span>))<span class="ruby-operator">+</span>
+<span class="ruby-constant">Fig</span>.<span class="ruby-identifier">formatting</span>
+</pre>
+
+<p>DOC.diff.T4</p>
+
+<p>mod.DOC.rep&lt;-rep(c(</p>
+
+<pre>&quot;Day 10: Treatment with by-factor smooth&quot;, 
+&quot;Day 10: Treatment with global smooth&quot;, 
+&quot;Day 10: global smooth&quot;,
+&quot;Day 31: Treatment with by-factor smooth&quot;, 
+&quot;Day 31: Treatment with global smooth&quot;, 
+&quot;Day 31: global smooth&quot;,
+&quot;Day 59: Treatment with by-factor smooth&quot;, 
+&quot;Day 59: Treatment with global smooth&quot;, 
+&quot;Day 59: global smooth&quot;,
+&quot;Day 89: Treatment with by-factor smooth&quot;, 
+&quot;Day 89: Treatment with global smooth&quot;, 
+&quot;Day 89: global smooth&quot;))</pre>
+
+<p>mod.DOC.column&lt;- data.frame(mod.DOC.rep) AIC.DOC&lt;-bind_rows(T1.DOC.AIC, T2.DOC.AIC, T3.DOC.AIC, T4.DOC.AIC) AIC.DOC.mod&lt;-as.data.frame(cbind(mod.DOC.column, AIC.DOC))</p>
+
+<p><a href="1">names(AIC.DOC.mod)</a>=“Model”</p>
+
+<p>AIC.DOC.mod &lt;- AIC.DOC.mod %&gt;%</p>
+
+<pre># Creating an empty column:
+add_column(Variable= c(&quot;DOC concentration&quot;), .before=&quot;Model&quot;)</pre>
+
+<p>write.csv(AIC.DOC.mod, “output/AIC models/AIC.DOC.csv”)</p>
+
+<p>convert dataframe into a table for export pdf(“/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/DOC.mod.AIC.pdf”, width = 6.8, height = 3.8)       # Export PDF grid.table(AIC.DOC.mod, rows = NULL) dev.off()</p>
+
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.1.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
