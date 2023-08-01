@@ -53,7 +53,7 @@ Fig.formatting<-(theme_classic()) +
 ```
 
 ###DOC  
-import and do a loop to clean up all files and make stacked data in single df
+import and for loop to clean up all files and make stacked data in single df
 ```{r DOC import}
 ## import treatment IDs
 IDs<-read.csv("data/treatment.IDs.csv")
@@ -218,11 +218,6 @@ DOC.T1.mod.plot<-
   xlab("plant material (g)") +
   Fig.formatting
 
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.DOC.T2.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -268,11 +263,6 @@ DOC.T2.mod.plot<-
   ylab("DOC (mg/L)") +
   xlab("plant material (g)") +
   Fig.formatting
-
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
 
 ########## T3
 m1.DOC.T3.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
@@ -320,10 +310,6 @@ DOC.T3.mod.plot<-
   xlab("plant material (g)") +
   Fig.formatting
 
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
-
 ########## T4
 m1.DOC.T4.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
@@ -370,9 +356,6 @@ DOC.diff.T4<-plot_difference(
 
 DOC.diff.T4
 
-# no effect of treatment, smoothing significant across both treatments
-# DOC equivalent in  burned and unburned
-
 mod.DOC.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
               "Day 10: Treatment with global smooth", 
@@ -405,9 +388,6 @@ write.csv(AIC.DOC.mod, "output/AIC models/AIC.DOC.csv")
 pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/DOC.mod.AIC.pdf", width = 6.8, height = 3.8)       # Export PDF
 grid.table(AIC.DOC.mod, rows = NULL)
 dev.off()
-
-
-
 
 ```
 
@@ -445,10 +425,6 @@ DOC.mod.allsums <- DOC.mod.allsums %>%
 pdf("output/Codys.tables/DOC.mod.allsums.pdf", width = 9.3, height = 3.8)       # Export PDF
 grid.table(DOC.mod.allsums, rows= NULL)
 dev.off()
-
-
-
-
 
 ```
 
@@ -573,7 +549,7 @@ UVBIO.df$Filt.UV<-interaction(UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
 ```
 
 
-SUVA 
+###SUVA 
 SUVA calculations
 Time point 0
 ```{r}
@@ -622,7 +598,7 @@ suva.t1.df$plant.mass..g=IDs$plant.mass..g
 suva.t1.df$SUVA=(suva.t1.df[suva.t1.df$Tank,]$abs254/suva.t1.df[suva.t1.df$Tank,]$DOC..mg.L)*100
 ```
 
-Time point 2
+Time point 2 
 ```{r}
 #load file and rearrange
 suva.t2.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania/data/EEMs/Results_T2_d1A.edit.csv")
@@ -644,7 +620,7 @@ suva.t2.df$SUVA=(suva.t2.df[suva.t2.df$Tank,]$abs254/suva.t2.df[suva.t2.df$Tank,
 
 ```
 
-Time point 3
+Time point 3 
 ```{r}
 suva.t3.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania/data/EEMs/Results_T3.csv")
 names(suva.t3.df)[1]="Tank"
@@ -727,8 +703,7 @@ index.T4.df=index.T4.df[-c(7:11,13,14)]
 index.df=rbind(index.T0.df, index.T1.df, index.T2.df, index.T3.df, index.T4.df)
 ```
 
-Add new metrics to DOC
-###DOC  
+Add these new metrics to DOC df
 import and do a loop to clean up all files and make stacked data in single df
 ```{r}
 
@@ -739,32 +714,35 @@ DOC_T2$SUVA=suva.df[suva.df$Time.point=="T2",]$SUVA
 DOC_T3$SUVA=suva.df[suva.df$Time.point=="T3",]$SUVA
 DOC_T4$SUVA=suva.df[suva.df$Time.point=="T4",]$SUVA
 
+#HIX
 DOC_T0$hix=index.df[index.df$Time.point=="T0",]$Humification.Index
 DOC_T1$hix=index.df[index.df$Time.point=="T1",]$Humification.Index
 DOC_T2$hix=index.df[index.df$Time.point=="T2",]$Humification.Index
 DOC_T3$hix=index.df[index.df$Time.point=="T3",]$Humification.Index
 DOC_T4$hix=index.df[index.df$Time.point=="T4",]$Humification.Index
 
+#Fluorescence
 DOC_T0$fl=index.df[index.df$Time.point=="T0",]$Fluroscence.Index
 DOC_T1$fl=index.df[index.df$Time.point=="T1",]$Fluroscence.Index
 DOC_T2$fl=index.df[index.df$Time.point=="T2",]$Fluroscence.Index
 DOC_T3$fl=index.df[index.df$Time.point=="T3",]$Fluroscence.Index
 DOC_T4$fl=index.df[index.df$Time.point=="T4",]$Fluroscence.Index
 
+#slope ratio
 DOC_T0$sr=suva.df[suva.df$Time.point=="T0",]$Spectral.Slope.Ratio
 DOC_T1$sr=suva.df[suva.df$Time.point=="T1",]$Spectral.Slope.Ratio
 DOC_T2$sr=suva.df[suva.df$Time.point=="T2",]$Spectral.Slope.Ratio
 DOC_T3$sr=suva.df[suva.df$Time.point=="T3",]$Spectral.Slope.Ratio
 DOC_T4$sr=suva.df[suva.df$Time.point=="T4",]$Spectral.Slope.Ratio
 
-
+#freshness (BIX)
 DOC_T0$fr=index.df[index.df$Time.point=="T0",]$Freshness.Index
 DOC_T1$fr=index.df[index.df$Time.point=="T1",]$Freshness.Index
 DOC_T2$fr=index.df[index.df$Time.point=="T2",]$Freshness.Index
 DOC_T3$fr=index.df[index.df$Time.point=="T3",]$Freshness.Index
 DOC_T4$fr=index.df[index.df$Time.point=="T4",]$Freshness.Index
 
-
+#combine
 DOC.df<-rbind(DOC_T0, DOC_T1, DOC_T2, DOC_T3, DOC_T4)
 
 #Extract file
@@ -807,7 +785,6 @@ m3.SUVA.T0.gam=gam(SUVA ~  s(plant.mass..g), subset = Time.point=="T0", data = D
 
 T0.suva.AIC<-AIC(m1.SUVA.T0.gam, m2.SUVA.T0.gam, m3.SUVA.T0.gam)
 T0.suva.AIC
-# best is two smoother 
 
 summary(m1.SUVA.T0.gam)
 anova.gam(m1.SUVA.T0.gam)
@@ -850,7 +827,6 @@ m3.suva.T1.gam=gam(SUVA ~  s(plant.mass..g), subset = Time.point=="T1", data = D
 
 T1.suva.AIC<-AIC(m1.suva.T1.gam, m2.suva.T1.gam, m3.suva.T1.gam)
 T1.suva.AIC
-# best is two smoother
 
 summary(m1.suva.T1.gam)
 T1.suva.anova=anova(m1.suva.T1.gam)
@@ -887,11 +863,6 @@ suva.T1.mod.plot<-
   xlab("") +
   Fig.formatting
 
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.suva.T2.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -901,8 +872,6 @@ m3.suva.T2.gam=gam(SUVA ~  s(plant.mass..g), subset = Time.point=="T2", data = D
 
 T2.suva.AIC<-AIC(m1.suva.T2.gam, m2.suva.T2.gam, m3.suva.T2.gam)
 T2.suva.AIC
-
-# best is smooth by factor
 
 summary(m1.suva.T2.gam)
 T2.suva.anova=anova(m1.suva.T2.gam)
@@ -942,11 +911,6 @@ suva.T2.mod.plot<-
 
 suva.T2.mod.plot
 
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
-
 ########## T3
 m1.suva.T3.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
@@ -956,7 +920,6 @@ m3.suva.T3.gam=gam(SUVA ~  s(plant.mass..g), subset = Time.point=="T3", data = D
 
 T3.suva.AIC<-AIC(m1.suva.T3.gam, m2.suva.T3.gam, m3.suva.T3.gam)
 T3.suva.AIC
-# best by factor smooth
 
 summary(m1.suva.T3.gam)
 T3.suva.anova=anova(m1.suva.T3.gam)
@@ -993,10 +956,6 @@ suva.T3.mod.plot<-
   ylab("") +
   xlab("") +
   Fig.formatting
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
 
 ########## T4
 m1.suva.T4.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
@@ -1047,8 +1006,6 @@ suva.T4.mod.plot<-
 
 suva.T4.mod.plot
 
-# no effect of treatment, smoothing significant across both treatments
-# DOC equivalent in  burned and unburned
 mod.suva.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
               "Day 10: Treatment with global smooth", 
@@ -1081,8 +1038,6 @@ pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/suva.mod.AIC.pdf
 grid.table(AIC.suva.mod, rows= NULL)
 dev.off()
 
-
-
 ```
 
 Generate dataframe for model outputs
@@ -1096,7 +1051,6 @@ suva.para.sums <- suva.para.sums %>%
   # Creating an empty column:
   add_column(Model= c("Day 10 Model: Treatment","Day 31 Model: Treatment","Day 59 Model: Treatment","Day 89 Model: Treatment"), .before="df/edf")%>%
   add_column(Ref.df = "-", .after="df/edf")
-  
 
 #####Smooth output
 suva.smooth.sums=as.data.frame(rbind(T1.suva.anova$s.table, T2.suva.anova$s.table, T3.suva.anova$s.table, T4.suva.anova$s.table))
@@ -1114,8 +1068,6 @@ rownames(suva.mod.allsums)<-c(1:12)
 suva.mod.allsums <- suva.mod.allsums %>%
   # Creating an empty column:
   add_column(Variable= c("SUVA"), .before="Model")
-
-
 
 #convert dataframe into a table for export
 pdf("output/Codys.tables/suva.mod.allsums.pdf", width = 8.5, height = 3.8)       # Export PDF
@@ -1164,7 +1116,6 @@ m3.sr.T0.gam=gam(sr ~  s(plant.mass..g), subset = Time.point=="T0", data = DOC.d
 
 T0.sr.AIC<-AIC(m1.sr.T0.gam, m2.sr.T0.gam, m3.sr.T0.gam)
 T0.sr.AIC
-# best is two smoother 
 
 summary(m1.sr.T0.gam)
 anova.gam(m1.sr.T0.gam)
@@ -1182,7 +1133,6 @@ sr.diff.T0<-plot_difference(
 )+
   coord_cartesian(ylim = c(-0.75,0.75))+
   Fig.formatting
-
 
 ###########  
 sr.T0.mod.plot<-
@@ -1202,7 +1152,6 @@ sr.T0.mod.plot<-
 
 sr.T0.mod.plot
 
-
 ######## T1 model
 m1.sr.T1.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
@@ -1212,7 +1161,6 @@ m3.sr.T1.gam=gam(sr ~  s(plant.mass..g), subset = Time.point=="T1", data = DOC.d
 
 T1.sr.AIC<-AIC(m1.sr.T1.gam, m2.sr.T1.gam, m3.sr.T1.gam)
 T1.sr.AIC
-# best is two smoother
 
 summary(m1.sr.T1.gam)
 T1.sr.anova=anova(m1.sr.T1.gam)
@@ -1251,11 +1199,6 @@ sr.T1.mod.plot<-
 
 sr.T1.mod.plot
 
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.sr.T2.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -1265,8 +1208,6 @@ m3.sr.T2.gam=gam(sr ~  s(plant.mass..g), subset = Time.point=="T2", data = DOC.d
 
 T2.sr.AIC<-AIC(m1.sr.T2.gam, m2.sr.T2.gam, m3.sr.T2.gam)
 T2.sr.AIC
-
-# best is global smooth 
 
 summary(m3.sr.T2.gam)
 T2.sr.anova=anova(m1.sr.T2.gam)
@@ -1304,12 +1245,6 @@ sr.T2.mod.plot<-
 
 sr.T2.mod.plot 
 
-
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
-
 ########## T3
 m1.sr.T3.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
@@ -1321,7 +1256,6 @@ m4.sr.T3.gam=gam(sr ~  Treatment + s(plant.mass..g, m=c(2,0)), subset = Time.poi
 
 T3.sr.AIC<-AIC(m1.sr.T3.gam, m2.sr.T3.gam, m3.sr.T3.gam)
 T3.sr.AIC
-# best by factor smooth
 
 summary(m1.sr.T3.gam)
 T3.sr.anova=anova(m1.sr.T3.gam)
@@ -1361,10 +1295,6 @@ sr.T3.mod.plot<-
 
 sr.T3.mod.plot
 
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
-
 ########## T4
 m1.sr.T4.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
@@ -1375,7 +1305,6 @@ m3.sr.T4.gam=gam(sr ~  s(plant.mass..g), subset = Time.point=="T4", data = DOC.d
 T4.sr.AIC<-AIC(m1.sr.T4.gam, m2.sr.T4.gam, m3.sr.T4.gam)
 T4.sr.AIC
 
-# best is global
 summary(m1.sr.T4.gam)
 T4.sr.anova=anova(m1.sr.T4.gam)
 gam.check(m1.sr.T4.gam, rep=1000)
@@ -1412,9 +1341,6 @@ sr.T4.mod.plot<-
   Fig.formatting
 
 sr.T4.mod.plot
-
-# no effect of treatment, smoothing significant across both treatments
-# DOC equivalent in  burned and unburned
 
 mod.sr.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
@@ -1484,7 +1410,6 @@ pdf("output/Codys.tables/sr.mod.allsums.pdf", width = 8.5, height = 3.8)       #
 grid.table(sr.mod.allsums, rows= NULL)
 dev.off()
 
-
 ```
 
 
@@ -1524,7 +1449,6 @@ m3.hix.T0.gam=gam(hix ~  s(plant.mass..g), subset = Time.point=="T0", data = DOC
 
 T0.hix.AIC<-AIC(m1.hix.T0.gam, m2.hix.T0.gam, m3.hix.T0.gam)
 T0.hix.AIC
-# best is two smoother 
 
 summary(m1.hix.T0.gam)
 anova.gam(m1.hix.T0.gam)
@@ -1566,7 +1490,6 @@ m3.hix.T1.gam=gam(hix ~  s(plant.mass..g), subset = Time.point=="T1", data = DOC
 
 T1.hix.AIC<-AIC(m1.hix.T1.gam, m2.hix.T1.gam, m3.hix.T1.gam)
 T1.hix.AIC
-# best is two smoother
 
 summary(m3.hix.T1.gam)
 T1.hix.anova=anova(m1.hix.T1.gam)
@@ -1603,12 +1526,6 @@ hix.T1.mod.plot<-
   Fig.formatting
 hix.T1.mod.plot
 
-
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.hix.T2.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -1620,8 +1537,6 @@ m4.hix.T2.gam=gam(hix ~  Treatment + s(plant.mass..g, m=c(2,0)), subset = Time.p
 
 T2.hix.AIC<-AIC(m1.hix.T2.gam, m2.hix.T2.gam, m3.hix.T2.gam)
 T2.hix.AIC
-
-# best is global smooth 
 
 summary(m2.hix.T2.gam)
 T2.hix.anova=anova(m1.hix.T2.gam)
@@ -1661,11 +1576,6 @@ hix.T2.mod.plot<-
 
 hix.T2.mod.plot
 
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
-
 ########## T3
 m1.hix.T3.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
@@ -1675,7 +1585,6 @@ m3.hix.T3.gam=gam(hix ~  s(plant.mass..g), subset = Time.point=="T3", data = DOC
 
 T3.hix.AIC<-AIC(m1.hix.T3.gam, m2.hix.T3.gam, m3.hix.T3.gam)
 T3.hix.AIC
-# best by factor smooth
 
 summary(m1.hix.T3.gam)
 T3.hix.anova=anova(m1.hix.T3.gam)
@@ -1712,10 +1621,6 @@ hix.T3.mod.plot<-
   xlab("") +
   Fig.formatting
 
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
-
 ########## T4
 m1.hix.T4.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
@@ -1726,7 +1631,6 @@ m3.hix.T4.gam=gam(hix ~  s(plant.mass..g), subset = Time.point=="T4", data = DOC
 T4.hix.AIC<-AIC(m1.hix.T4.gam, m2.hix.T4.gam, m3.hix.T4.gam)
 T4.hix.AIC
 
-# best is global
 summary(m1.hix.T4.gam)
 T4.hix.anova=anova(m1.hix.T4.gam)
 gam.check(m1.hix.T4.gam, rep=1000)
@@ -1762,10 +1666,6 @@ hix.T4.mod.plot<-
   xlab("") +
   Fig.formatting
 
-
-
-# no effect of treatment, smoothing significant across both treatments
-# DOC equivalent in  burned and unburned
 mod.hix.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
               "Day 10: Treatment with global smooth", 
@@ -1800,7 +1700,6 @@ write.csv(AIC.hix.mod, "output/AIC models/AIC.hix.csv")
 pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/hix.mod.AIC.pdf", width = 6, height = 3.8)       # Export PDF
 grid.table(AIC.hix.mod, rows= NULL)
 dev.off()
-
 
 ```
 
@@ -1839,8 +1738,6 @@ hix.mod.allsums <- hix.mod.allsums %>%
 pdf("output/Codys.tables/hix.mod.allsums.pdf", width = 8.3, height = 3.8)       # Export PDF
 grid.table(hix.mod.allsums, rows= NULL)
 dev.off()
-
-
 ```
 
 
@@ -1880,7 +1777,6 @@ m3.fr.T0.gam=gam(fr ~  s(plant.mass..g), subset = Time.point=="T0", data = DOC.d
 
 T0.fr.AIC<-AIC(m1.fr.T0.gam, m2.fr.T0.gam, m3.fr.T0.gam)
 T0.fr.AIC
-# best is two smoother 
 
 summary(m1.fr.T0.gam)
 anova.gam(m1.fr.T0.gam)
@@ -1914,7 +1810,6 @@ fr.T0.mod.plot<-
 
 fr.T0.mod.plot
 
-
 ######## T1 model
 m1.fr.T1.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
@@ -1924,7 +1819,6 @@ m3.fr.T1.gam=gam(fr ~  s(plant.mass..g), subset = Time.point=="T1", data = DOC.d
 
 T1.fr.AIC<-AIC(m1.fr.T1.gam, m2.fr.T1.gam, m3.fr.T1.gam)
 T1.fr.AIC
-# best is two smoother
 
 summary(m1.fr.T1.gam)
 T1.fr.anova=anova(m1.fr.T1.gam)
@@ -1963,12 +1857,6 @@ fr.T1.mod.plot<-
 
 fr.T1.mod.plot
 
-
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.fr.T2.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -1979,7 +1867,6 @@ m3.fr.T2.gam=gam(fr ~  s(plant.mass..g), subset = Time.point=="T2", data = DOC.d
 T2.fr.AIC<-AIC(m1.fr.T2.gam, m2.fr.T2.gam, m3.fr.T2.gam)
 T2.fr.AIC
 
-# best is global smooth 
 
 summary(m1.fr.T2.gam)
 T2.fr.anova=anova(m1.fr.T2.gam)
@@ -2018,11 +1905,6 @@ fr.T2.mod.plot<-
 
 fr.T2.mod.plot
 
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
-
 ########## T3
 m1.fr.T3.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
@@ -2034,7 +1916,6 @@ m4.fr.T3.gam=gam(fr ~  Treatment + s(plant.mass..g, m=c(2,0)), subset = Time.poi
 
 T3.fr.AIC<-AIC(m1.fr.T3.gam, m2.fr.T3.gam, m3.fr.T3.gam)
 T3.fr.AIC
-# best by factor smooth
 
 summary(m2.fr.T3.gam)
 T3.fr.anova=anova(m1.fr.T3.gam)
@@ -2072,10 +1953,6 @@ fr.T3.mod.plot<-
   xlab("") +
   Fig.formatting
 
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
-
 ########## T4
 m1.fr.T4.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
@@ -2088,7 +1965,6 @@ m4.fr.T4.gam=gam(fr ~  Treatment + s(plant.mass..g, m=c(2,0)), subset = Time.poi
 T4.fr.AIC<-AIC(m1.fr.T4.gam, m2.fr.T4.gam, m3.fr.T4.gam)
 T4.fr.AIC
 
-# best is global
 summary(m2.fr.T4.gam)
 T4.fr.anova=anova(m1.fr.T4.gam)
 gam.check(m2.fr.T4.gam, rep=1000)
@@ -2125,7 +2001,6 @@ fr.T4.mod.plot<-
   xlab("") +
   Fig.formatting
 
-
 ```
 
 
@@ -2149,8 +2024,6 @@ fr.smooth.sums <- fr.smooth.sums %>%
   # Creating an empty column:
   add_column(Model= c("Day 10 Model: burned smooth","Day 10 Model: unburned smooth","Day 31 Model: burned smooth","Day 31 Model: unburned smooth","Day 59 Model: burned smooth","Day 59 Model: unburned smooth","Day 89 Model: burned smooth","Day 89 Model: unburned smooth"), .before="df/edf")
 
-
-
 #merge the dataframes
 fr.mod.allsums=rbind(fr.para.sums,fr.smooth.sums)
 
@@ -2164,9 +2037,6 @@ fr.mod.allsums <- fr.mod.allsums %>%
 pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/fr.mod.allsums.pdf", width = 8.3, height = 3.8)       # Export PDF
 grid.table(fr.mod.allsums, rows= NULL)
 dev.off()
-
-
-
 
 mod.fr.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
@@ -2198,7 +2068,6 @@ write.csv(AIC.fr.mod, "output/AIC models/AIC.fr.csv")
 pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/fr.mod.AIC.pdf", width = 6.3, height = 3.8)       # Export PDF
 grid.table(AIC.fr.mod, rows= NULL)
 dev.off()
-
 
 ```
 
@@ -2240,7 +2109,6 @@ m3.fl.T0.gam=gam(fl ~  s(plant.mass..g), subset = Time.point=="T0", data = DOC.d
 
 T0.fl.AIC<-AIC(m1.fl.T0.gam, m2.fl.T0.gam, m3.fl.T0.gam)
 T0.fl.AIC
-# best is two smoother 
 
 summary(m1.fl.T0.gam)
 anova.gam(m1.fl.T0.gam)
@@ -2277,7 +2145,6 @@ fl.T0.mod.plot<-
 
 fl.T0.mod.plot
 
-
 ######## T1 model
 m1.fl.T1.gam=gam(fl ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
@@ -2287,7 +2154,6 @@ m3.fl.T1.gam=gam(fl ~  s(plant.mass..g), subset = Time.point=="T1", data = DOC.d
 
 T1.fl.AIC<-AIC(m1.fl.T1.gam, m2.fl.T1.gam, m3.fl.T1.gam)
 T1.fl.AIC
-# best is two smoother
 
 summary(m1.fl.T1.gam)
 T1.fl.anova=anova(m1.fl.T1.gam)
@@ -2326,12 +2192,6 @@ fl.T1.mod.plot<-
 
 fl.T1.mod.plot
 
-
-
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  unburned, relative to burned
-
-
 ########## T2
 m1.fl.T2.gam=gam(fl ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
@@ -2341,8 +2201,6 @@ m3.fl.T2.gam=gam(fl ~  s(plant.mass..g), subset = Time.point=="T2", data = DOC.d
 
 T2.fl.AIC<-AIC(m1.fl.T2.gam, m2.fl.T2.gam, m3.fl.T2.gam)
 T2.fl.AIC
-
-# best is global smooth 
 
 summary(m1.fl.T2.gam)
 T2.fl.anova=anova(m1.fl.T2.gam)
@@ -2381,11 +2239,6 @@ fl.T2.mod.plot<-
 
 fl.T2.mod.plot
 
-# NO effect of treatment, smoothing significant across both treatments
-# DOC equivalent in burned and unburned 
-# DOC more variable/wonky across gradient in burned
-
-
 ########## T3
 m1.fl.T3.gam=gam(fl ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
@@ -2395,7 +2248,6 @@ m3.fl.T3.gam=gam(fl ~  s(plant.mass..g), subset = Time.point=="T3", data = DOC.d
 
 T3.fl.AIC<-AIC(m1.fl.T3.gam, m2.fl.T3.gam, m3.fl.T3.gam)
 T3.fl.AIC
-# best by factor smooth
 
 summary(m3.fl.T3.gam)
 T3.fl.anova=anova(m1.fl.T3.gam)
@@ -2431,10 +2283,6 @@ coord_cartesian(ylim = c(0.5,2.5))+
   xlab("") +
   Fig.formatting
 
-# effect of treatment, smoothing significant across both treatments
-# DOC higher in  burned vs. unburned
-
-
 ########## T4
 m1.fl.T4.gam=gam(fl ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
@@ -2445,7 +2293,6 @@ m3.fl.T4.gam=gam(fl ~  s(plant.mass..g), subset = Time.point=="T4", data = DOC.d
 T4.fl.AIC<-AIC(m1.fl.T4.gam, m2.fl.T4.gam, m3.fl.T4.gam)
 T4.fl.AIC
 
-# best is global
 summary(m3.fl.T4.gam)
 T4.fl.anova=anova(m1.fl.T4.gam)
 gam.check(m3.fl.T4.gam, rep=1000)
@@ -2480,12 +2327,6 @@ coord_cartesian(ylim = c(0.5,2.5))+
   xlab("") +
   Fig.formatting
 
-
-
-# no effect of treatment, smoothing significant across both treatments
-# DOC equivalent in  burned and unburned
-##combine AIC
-
 mod.fl.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
               "Day 10: Treatment with global smooth", 
@@ -2518,11 +2359,7 @@ pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/fl.mod.AIC.pdf",
 grid.table(AIC.fl.mod, rows=NULL)
 dev.off()
 
-
-
-
 ```
-
 
 
 Generate dataframe for model outputs
@@ -2658,8 +2495,6 @@ photo.df=photo.df%>%
 photo_t1.df=photo_t1.df%>%
     mutate_if(is.character,as.factor)
 
-
-
 #Microbe decomp
 microbe.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Time.point,
                       UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.NoUV",]$Start.DOC,
@@ -2703,7 +2538,8 @@ microbe.df=microbe.df%>%
 
 microbe_t1.df=microbe_t1.df%>%
     mutate_if(is.character,as.factor)
-#Total decomp= A
+
+#Total decomp
 total.df=data.frame(UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Time.point,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.DOC,
                     UVBIO.df[UVBIO.df$Filt.UV=="Unfiltered.UV",]$Start.TN,
@@ -2746,6 +2582,7 @@ total.df=total.df%>%
 
 total_t1.df=total_t1.df%>%
     mutate_if(is.character,as.factor)
+
 #merge degra.df time points into one dataframe
 
 
@@ -2766,7 +2603,6 @@ degra_t1.df=degra_t1.df%>%
 degra_t1.burned.df=degra_t1.df[degra_t1.df$Treatment=="burned",]
 degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
 
-
 ```
 
 
@@ -2782,94 +2618,6 @@ m2.photo.perc=gam(percent.change.DOC ~ Treatment +s(plant.mass..g), data=photo.d
 
 m3.photo.perc=gam(percent.change.DOC ~ s(plant.mass..g), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
 
-burned.m1=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.burned.df, method = "REML",select= T)
-summary(burned.m1)
-
-unburned.m1=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.unburned.df, method = "REML",select= T)
-summary(unburned.m1)
-
-
-
-
-
-photo.df2 <- transform(photo.df, oTreatment = ordered(Treatment))
-levels(photo.df2$Treatment)
-
-burned.gam3=gam(percent.change.DOC ~ Type +  s(plant.mass..g, by=Type), data = degra_t1.burned.df, method = "REML",select= T)
-
-gam3_diff=difference_smooths(burned.gam3, smooth = "s(plant.mass..g)", group_means=TRUE)
-gam3_diff
-xp=predict(burned.gam3, newdata= degra_t1.burned.df, type = "lpmatrix")
-
-
-## which cols of xp relate to splines of interest?
-c1 <- grepl('UV-only', colnames(xp))
-c2 <- grepl('micorbes-only', colnames(xp))
-## which rows of xp relate to sites of interest?
-r1 <- with(degra_t1.burned.df, Type == 'UV-only')
-r2 <- with(degra_t1.burned.df, Type == 'microbes-only')
-## difference rows of xp for data from comparison
-X <- xp[r1, ] - xp[r2, ]
-## zero out cols of X related to splines for other lochs
-X[, ! (c1 | c2)] <- 0
-## zero out the parametric cols
-X[, !grepl('^s\\(', colnames(xp))] <- 0
-
-
-dif <- X %*% coef(burned.gam3)
-
-se <- sqrt(rowSums((X %*% vcov(burned.gam3)) * X))
-crit <- qt(.975, df.residual(burned.gam3))
-upr <- dif + (crit * se)
-lwr <- dif - (crit * se)
-
-smooth_diff <- function(model, newdata, f1, f2, var, alpha = 0.05,
-                        unconditional = FALSE) {
-    xp <- predict(model, newdata = newdata, type = 'lpmatrix')
-    c1 <- grepl(f1, colnames(xp))
-    c2 <- grepl(f2, colnames(xp))
-    r1 <- newdata[[var]] == f1
-    r2 <- newdata[[var]] == f2
-    ## difference rows of xp for data from comparison
-    X <- xp[r1, ] - xp[r2, ]
-    ## zero out cols of X related to splines for other lochs
-    X[, ! (c1 | c2)] <- 0
-    ## zero out the parametric cols
-    X[, !grepl('^s\\(', colnames(xp))] <- 0
-    dif <- X %*% coef(model)
-    se <- sqrt(rowSums((X %*% vcov(model, unconditional = unconditional)) * X))
-    crit <- qt(alpha/2, df.residual(model), lower.tail = FALSE)
-    upr <- dif + (crit * se)
-    lwr <- dif - (crit * se)
-    data.frame(pair = paste(f1, f2, sep = '-'),
-               diff = dif,
-               se = se,
-               upper = upr,
-               lower = lwr)
-}
-
-comp1 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'UV-only', 'microbes-only', 'Type')
-comp2 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'UV-only', 'UV and microbes', 'Type')
-comp3 <- smooth_diff(burned.gam3, degra_t1.burned.df, 'microbes-only', 'UV and microbes', 'Type')
-comp <- cbind(plant.mass..g = seq(0, 400, length = 15),
-              rbind(comp1, comp2, comp3))
-
-ggplot(comp, aes(x = plant.mass..g, y = diff, group = pair)) +
-    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
-    geom_line() +
-    facet_wrap(~ pair, ncol = 2) +
-    coord_cartesian(ylim = c(-30,30)) +
-    labs(x = NULL, y = 'Difference in DOC trend')
-
-
-
-
-
-
-
-
-
-
 m1.photo.abs=gam(abs.change.DOC ~ Treatment +s(plant.mass..g, by= Treatment), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
 
 m2.photo.abs=gam(abs.change.DOC ~ Treatment +s(plant.mass..g), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
@@ -2880,7 +2628,6 @@ photo.AIC=AIC(m1.photo.abs, m2.photo.abs, m3.photo.abs)
 
 
 photo.AIC
-# global smooth
 
 summary(m1.photo.perc)
 photo.anova=anova(m1.photo.perc)
@@ -2908,8 +2655,6 @@ photo.mod.plot<-
   xlab("plant material (g)") +
     coord_cartesian(ylim = c(-40,10))+
   Fig.formatting
- 
-
 
 photo.mod.plot
 
@@ -2922,7 +2667,6 @@ m3.microbe.perc=gam(percent.change.DOC ~ s(plant.mass..g), data=microbe.df, meth
 
 microbe.AIC=AIC(m1.microbe.perc, m2.microbe.perc, m3.microbe.perc)
 microbe.AIC
-# global smooth
 
 summary(m3.microbe.perc)
 microbe.anova=anova(m1.microbe.perc)
@@ -2951,8 +2695,6 @@ microbe.mod.plot<-
  coord_cartesian(ylim = c(-30,0))
 
 
-microbe.mod.plot
-
 ###Just total decomp
 m1.total.perc=gam(percent.change.DOC ~ Treatment +s(plant.mass..g, by= Treatment), data=total.df, method="REML", select= T, subset= Time.point=="T1")
 
@@ -2964,7 +2706,6 @@ m4.total.perc=gam(percent.change.DOC ~ s(plant.mass..g, m=c(2,0)), data=total.df
 
 total.AIC=AIC(m1.total.perc, m2.total.perc, m3.total.perc)
 total.AIC
-# global smooth
 
 summary(m3.total.perc)
 total.anova=anova(m1.total.perc)
@@ -2989,34 +2730,6 @@ total.mod.plot<-
   coord_cartesian(ylim = c(-40,10))+
   xlab("plant material (g)") +
   Fig.formatting
-
-
-
-total.mod.plot
-
-#compare difference between effect on DOC loss
-
-
-m1.loss.perc=gam(percent.change.DOC ~ Type +s(plant.mass..g, by= Type), data=degra.df, method="REML", select= T, subset= Time.point=="T1")
-gam.check(m1.loss.perc, rep=1000)
-draw(m1.loss.perc)
-m1.loss.aov=anova(m1.loss.perc)
-m1.loss.aov
-summary(m1.loss.perc)
-TukeyHSD(m1.loss.aov)
-plot_difference(m1.loss.perc)
-
-
-
-
-degra.df2 <- transform(degra.df, oTreatment = ordered(Treatment))
-levels(degra.df2$Treatment)
-
-gam3 <- gam(percent.change.DOC ~ oType + s(plant.mass..g, by = oType),
-            data = degra.df2, method = "ML")
-
-levels(degra.df2$oType)
-summary(gam3)
 
 ##combine AIC
 mod.degra.rep<-rep(c("UV-only: Treatment with by-factor smooth", 
@@ -3067,8 +2780,6 @@ degra.para.sums <- degra.para.sums %>%
 degra.smooth.sums=as.data.frame(rbind(photo.anova$s.table, microbe.anova$s.table, total.anova$s.table))
 names(degra.smooth.sums)[1]="df/edf"
 
-
-
 #create empty column for ref.df
 degra.smooth.sums <- degra.smooth.sums %>%
   # Creating an empty column:
@@ -3089,574 +2800,9 @@ pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.mod.allsum
 grid.table(degra.mod.allsums, rows=NULL)
 dev.off()
 
-
-
 ```
 
 
-compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
-fsdfsd
-mean(microbe_t1.df[microbe_t1.df$plant.mass..g<="75" & microbe_t1.df$plant.mass..g>="275",]$percent.change.DOC)
-
-mean(microbe_t1.df[microbe_t1.df$plant.mass..g>="150" & microbe_t1.df$plant.mass..g<="250",]$percent.change.DOC)
-
-degra.mod.plot<-plot_grid(
-photo.mod.plot+ theme(legend.position = "none"),
-total.mod.plot+ theme(legend.position = "none"),
-microbe.mod.plot+ theme(legend.position = "none"), extract.legend,
-  rel_widths = c(8,8,8,3), ncol=4)
-
-degra.mod.plot
-
-ggplot(degra_t1.df, aes(x= plant.mass..g, y=percent.change.DOC, linetype=Treatment, color=Type, fill=Type))+
-  geom_point()+
- scale_color_manual(values = c("gold", "magenta", "cornflowerblue")) + 
-   scale_fill_manual(values = c("gold", "magenta", "cornflowerblue")) +
-  geom_smooth(method = "gam", formula = y~s(x))+
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  facet_grid(~Treatment)+
-  Fig.formatting.boxplot
-
-ggplot(degra_t1.df, aes(x= plant.mass..g, y=percent.change.DOC, linetype=Treatment, color=Treatment, fill=Treatment))+
-  geom_point(alpha=0.4)+
- scale_color_manual(values = c("brown1", "mediumseagreen")) +
-   scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  geom_smooth(method = "gam", formula = y~s(x))+
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  facet_grid(Treatment~Type)+
-  Fig.formatting.boxplot
-
-ggsave("figures/degra.mod.plot.pdf", height=4, width=12)
-
-```
-
-
-% change DOC across SUVA (relate composition with decomposition)
-```{r}
-###Decomposition across SUVA for photo
-m1.suva.photo=gam(percent.change.DOC ~ Treatment +s(SUVA, by= Treatment), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.suva.photo=gam(percent.change.DOC ~ Treatment +s(SUVA), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.suva.photo=gam(percent.change.DOC ~ s(SUVA), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-photo.suva.AIC=AIC(m1.suva.photo, m2.suva.photo, m3.suva.photo)
-photo.suva.AIC
-photo.suva.anova=anova(m1.suva.photo)
-photo.suva.anova
-
-# global smooth
-
-photo.suva.plot=plot_smooths(
-  model = m3.suva.photo,
-  series = SUVA
-) + 
-  geom_point(data=photo.df[(photo.df$Time.point=="T1"),], 
-             aes(x=SUVA, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("Change DOC (%)") +
-xlab(expression('SUVA'["254"]~'(mgC'~ L^-1~m^-1*')'))+
-
-  Fig.formatting
-
-ggplot(DOC.df, aes(x=DOC..mg.L, y=SUVA, fill=Treatment, color=Treatment))+
-  geom_point()+
-  geom_smooth(method = "gam", formula = y~s(x))+
-facet_grid(~Time.point, scales = "free")
-
- photo.suva.plot
- 
- 
-
-###Decomposition across SUVA for microbes
-m1.suva.microbes=gam(percent.change.DOC ~ Treatment +s(SUVA, by= Treatment), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.suva.microbes=gam(percent.change.DOC ~ Treatment +s(SUVA), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.suva.microbes=gam(percent.change.DOC ~ s(SUVA), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-microbe.suva.AIC=AIC(m1.suva.microbes, m2.suva.microbes, m3.suva.microbes)
-microbe.suva.AIC
-microbe.suva.anova=anova(m1.suva.microbes)
-summary(m3.suva.microbes)
-# global smooth
-
-microbe.suva.plot=plot_smooths(
-  model = m3.suva.microbes,
-  series = SUVA
-) + 
-  geom_point(data=microbe.df[(microbe.df$Time.point=="T1"),], 
-             aes(x=SUVA, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("microbes-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
-xlab(expression('SUVA'["254"]~'(mgC'~ L^-1~m^-1*')'))+
-
-  Fig.formatting
-  coord_cartesian(ylim = c(-30,0))
-  
-microbe.suva.plot
-  ###Decomposition across SUVA for microbes
-m1.suva.total=gam(percent.change.DOC ~ Treatment +s(SUVA, by= Treatment), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.suva.total=gam(percent.change.DOC ~ Treatment +s(SUVA), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.suva.total=gam(percent.change.DOC ~ s(SUVA), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-total.suva.AIC=AIC(m1.suva.total, m2.suva.total, m3.suva.total)
-total.suva.AIC
-total.suva.anova=anova(m1.suva.total)
-
-# global smooth
-
-total.suva.plot=plot_smooths(
-  model = m3.suva.total,
-  series = SUVA
-) + 
-  geom_point(data=total.df[(total.df$Time.point=="T1"),], 
-             aes(x=SUVA, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV and microbes") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
- xlab(expression('SUVA'["254"]~'(mgC'~ L^-1~m^-1*')'))+
-  coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
- 
-total.suva.plot
-
-##combine AIC
-mod.degra.suva.rep<-rep(c("UV-only: Treatment with by-factor smooth", 
-              "UV-only: Treatment with global smooth", 
-              "UV-only: global smooth",
-              "Microbes-only: Treatment with by-factor smooth", 
-              "Microbes-only: Treatment with global smooth", 
-              "Microbes-only: global smooth",
-              "UV and microbes: Treatment with by-factor smooth", 
-              "UV and microbes: Treatment with global smooth", 
-              "UV and microbes: global smooth"))
-
-mod.degra.suva.column<- data.frame(mod.degra.suva.rep)
-AIC.degra.suva<-bind_rows(photo.suva.AIC, microbe.suva.AIC, total.suva.AIC)
-AIC.degra.suva.mod<-as.data.frame(cbind(mod.degra.suva.column, AIC.degra.suva))
-
-names(AIC.degra.suva.mod)[1]="Model"
-AIC.degra.suva.mod <- AIC.degra.suva.mod %>%
-  # Creating an empty column:
-  add_column(Variable= c("SUVA"), .before="Model")
-
-write.csv(AIC.degra.suva.mod, "output/AIC models/AIC.degra.suva.csv")
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.suva.mod.AIC.pdf", width = 6.5, height = 2.8)       # Export PDF
-grid.table(AIC.degra.suva.mod, rows=NULL)
-dev.off()
-
-```
-
-Generate dataframe for model outputs
-```{r}
-####Parametric output
-degra.suva.para.sums=as.data.frame(rbind(photo.suva.anova$pTerms.table, microbe.suva.anova$pTerms.table, total.suva.anova$pTerms.table))
-degra.suva.para.sums
-names(degra.suva.para.sums)[1]="df/edf"
-
-#create empty column for ref.df
-degra.suva.para.sums <- degra.suva.para.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: Treatment","Microbes-only Model: Treatment","UV and microbes Model: Treatment"), .before="df/edf")%>%
-  add_column(Ref.df = "-", .after="df/edf")
-  
-
-#####Smooth output
-degra.smooth.suva.sums=as.data.frame(rbind(photo.suva.anova$s.table, microbe.suva.anova$s.table, total.suva.anova$s.table))
-names(degra.smooth.suva.sums)[1]="df/edf"
-
-
-
-#create empty column for ref.df
-degra.smooth.suva.sums <- degra.smooth.suva.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: burned smooth","UV-only Model: unburned smooth","Microbes-only Model: burned smooth","Microbes-only Model: unburned smooth","UV and microbes Model: burned smooth","UV and microbes Model: unburned smooth"), .before="df/edf")
-
-#merge the dataframes
-degra.suva.mod.allsums=rbind(degra.suva.para.sums,degra.smooth.suva.sums)
-
-degra.suva.mod.allsums <- degra.suva.mod.allsums %>%
-  # Creating an empty column:
-  add_column(Variable= c("SUVA"), .before="Model")
-
-
-write.csv(degra.suva.mod.allsums,"/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.suva.mod.allsums.csv")
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.suva.mod.allsums.pdf", width = 8.5, height = 2.8)       # Export PDF
-grid.table(degra.suva.mod.allsums, rows=NULL)
-dev.off()
-
-```
-
-compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
-
-degra.suva.mod.plot<-plot_grid(
-photo.suva.plot+ theme(legend.position = "none"),
-microbe.suva.plot+ theme(legend.position = "none"),
-total.suva.plot+ theme(legend.position = "none"), extract.legend,
-  rel_widths = c(8,8,8,3), ncol=4)
-
-degra.suva.mod.plot
-
-ggsave("figures/degra.suva.mod.plot.pdf", height=4, width=12)
-
-```
-
-
-% change DOC across HIX (relate composition with decomposition)
-```{r}
-###Decomposition across SUVA for photo
-m1.hix.photo=gam(percent.change.DOC ~ Treatment +s(HIX, by= Treatment), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.hix.photo=gam(percent.change.DOC ~ Treatment +s(HIX), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.hix.photo=gam(percent.change.DOC ~ s(HIX), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-photo.hix.AIC=AIC(m1.hix.photo, m2.hix.photo, m3.hix.photo)
-photo.hix.AIC
-photo.hix.anova=anova(m1.hix.photo)
-photo.hix.anova
-
-photo.hix.plot=plot_smooths(
-  model = m2.hix.photo,
-  series = HIX,
-  comparison = Treatment
-) + 
-  geom_point(data=photo.df[(photo.df$Time.point=="T1"),], 
-             aes(x=HIX, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-   scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("Change DOC (%)") +
-  xlab("HIX") +
-    coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
- 
-
-###Decomposition across HIX for microbes
-m1.hix.microbes=gam(percent.change.DOC ~ Treatment +s(HIX, by= Treatment), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.hix.microbes=gam(percent.change.DOC ~ Treatment +s(HIX), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.hix.microbes=gam(percent.change.DOC ~ s(HIX), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-microbe.hix.AIC=AIC(m1.hix.microbes, m2.hix.microbes, m3.hix.microbes)
-microbe.hix.anova=anova(m1.hix.microbes)
-
-microbe.AIC
-# global smooth
-microbe.hix.plot=plot_smooths(
-  model = m3.hix.microbes,
-  series = HIX
-) + 
-  geom_point(data=microbe.df[(microbe.df$Time.point=="T1"),], 
-             aes(x=HIX, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("microbes-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
-  xlab("HIX") +
-    coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
-  
-  ###Decomposition across HIX for microbes
-m1.hix.total=gam(percent.change.DOC ~ Treatment +s(HIX, by= Treatment), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.hix.total=gam(percent.change.DOC ~ Treatment +s(HIX), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.hix.total=gam(percent.change.DOC ~ s(HIX), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-total.hix.AIC=AIC(m1.hix.total, m2.hix.total, m3.hix.total)
-total.hix.anova=anova(m1.hix.total)
-# global smooth
-total.hix.plot=plot_smooths(
-  model = m3.hix.total,
-  series = HIX
-) + 
-  geom_point(data=total.df[(total.df$Time.point=="T1"),], 
-             aes(x=HIX, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV and microbes") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
-  xlab("HIX") +
-  coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
-
-##combine AIC
-mod.degra.hix.rep<-rep(c("UV-only: Treatment with by-factor smooth", 
-              "UV-only: Treatment with global smooth", 
-              "UV-only: global smooth",
-              "Microbes-only: Treatment with by-factor smooth", 
-              "Microbes-only: Treatment with global smooth", 
-              "Microbes-only: global smooth",
-              "UV and microbes: Treatment with by-factor smooth", 
-              "UV and microbes: Treatment with global smooth", 
-              "UV and microbes: global smooth"))
-
-mod.degra.hix.column<- data.frame(mod.degra.hix.rep)
-AIC.degra.hix<-bind_rows(photo.hix.AIC, microbe.hix.AIC, total.hix.AIC)
-AIC.degra.hix.mod<-as.data.frame(cbind(mod.degra.hix.column, AIC.degra.hix))
-
-names(AIC.degra.hix.mod)[1]="Model"
-AIC.degra.hix.mod <- AIC.degra.hix.mod %>%
-  # Creating an empty column:
-  add_column(Variable= c("HIX"), .before="Model")
-
-write.csv(AIC.degra.hix.mod, "output/AIC models/AIC.degra.hix.csv")
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.hix.mod.AIC.pdf", width = 6.5, height = 2.8)       # Export PDF
-grid.table(AIC.degra.hix.mod, rows=NULL)
-dev.off()
- 
- 
-
-```
-
-
-Generate dataframe for model outputs
-```{r}
-####Parametric output
-degra.hix.para.sums=as.data.frame(rbind(photo.hix.anova$pTerms.table, microbe.hix.anova$pTerms.table, total.hix.anova$pTerms.table))
-
-names(degra.hix.para.sums)[1]="df/edf"
-
-#create empty column for ref.df
-degra.hix.para.sums <- degra.hix.para.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: Treatment","Microbes-only Model: Treatment","UV and microbes Model: Treatment"), .before="df/edf")%>%
-  add_column(Ref.df = "-", .after="df/edf")
-  
-
-#####Smooth output
-degra.smooth.hix.sums=as.data.frame(rbind(photo.hix.anova$s.table, microbe.hix.anova$s.table, total.hix.anova$s.table))
-names(degra.smooth.hix.sums)[1]="df/edf"
-
-
-
-#create empty column for ref.df
-degra.smooth.hix.sums <- degra.smooth.hix.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: burned smooth","UV-only Model: unburned smooth","Microbes-only Model: burned smooth","Microbes-only Model: unburned smooth","UV and microbes Model: burned smooth","UV and microbes Model: unburned smooth"), .before="df/edf")
-
-#merge the dataframes
-degra.hix.mod.allsums=rbind(degra.hix.para.sums,degra.smooth.hix.sums)
-
-degra.hix.mod.allsums <- degra.hix.mod.allsums %>%
-  # Creating an empty column:
-  add_column(Variable= c("HIX"), .before="Model")
-
-
-write.csv(degra.hix.mod.allsums, "/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.hix.mod.allsums.csv")
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.hix.mod.allsums.pdf", width = 8.5, height = 2.8)       # Export PDF
-grid.table(degra.hix.mod.allsums, rows=NULL)
-dev.off()
-
-
-
-```
-compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
-
-degra.hix.mod.plot<-plot_grid(
-photo.hix.plot+ theme(legend.position = "none"),
-microbe.hix.plot+ theme(legend.position = "none"),
-total.hix.plot+ theme(legend.position = "none"), extract.legend,
-  rel_widths = c(8,8,8,3), ncol=4)
-
-degra.hix.mod.plot
-
-ggsave("figures/degra.hix.mod.plot.pdf", height=4, width=12)
-
-```
-
-% change DOC across Sr (relate composition with decomposition)
-```{r}
-###Decomposition across Sr for photo
-m1.sr.photo=gam(percent.change.DOC ~ Treatment +s(Spectral.slope, by= Treatment), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.sr.photo=gam(percent.change.DOC ~ Treatment +s(Spectral.slope), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.sr.photo=gam(percent.change.DOC ~ s(Spectral.slope), data=photo.df, method="REML", select= T, subset= Time.point=="T1")
-
-photo.sr.AIC=AIC(m1.sr.photo, m2.sr.photo, m3.sr.photo)
-photo.sr.anova=anova(m1.sr.photo)
-# global smooth
-photo.sr.plot=plot_smooths(
-  model = m3.sr.photo,
-  series = Spectral.slope
-) + 
-  geom_point(data=photo.df[(photo.df$Time.point=="T1"),], 
-             aes(x=Spectral.slope, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("Change DOC (%)") +
-   xlab(expression('S'[italic(R)]))+
-  coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
- 
-
-###Decomposition across Sr for microbes
-m1.sr.microbes=gam(percent.change.DOC ~ Treatment +s(Spectral.slope, by= Treatment), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.sr.microbes=gam(percent.change.DOC ~ Treatment +s(Spectral.slope), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.sr.microbes=gam(percent.change.DOC ~ s(Spectral.slope), data=microbe.df, method="REML", select= T, subset= Time.point=="T1")
-
-microbe.sr.AIC=AIC(m1.sr.microbes, m2.sr.microbes, m3.sr.microbes)
-microbe.sr.anova=anova(m1.sr.microbes)
-# global smooth
-microbe.sr.plot=plot_smooths(
-  model = m3.sr.microbes,
-  series= Spectral.slope
-) + 
-  geom_point(data=microbe.df[(microbe.df$Time.point=="T1"),], 
-             aes(x=Spectral.slope, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("microbes-only") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
-  xlab("Sr") +
-    coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
-  
-  ###Decomposition across Sr for microbes
-m1.sr.total=gam(percent.change.DOC ~ Treatment +s(Spectral.slope, by= Treatment), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m2.sr.total=gam(percent.change.DOC ~ Treatment +s(Spectral.slope), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-m3.sr.total=gam(percent.change.DOC ~ s(Spectral.slope), data=total.df, method="REML", select= T, subset= Time.point=="T1")
-
-total.sr.AIC=AIC(m1.sr.total, m2.sr.total, m3.sr.total)
-total.sr.anova=anova(m1.sr.total)
-# global smooth
-total.sr.plot=plot_smooths(
-  model = m3.sr.total,
-  series = Spectral.slope
-) + 
-  geom_point(data=total.df[(total.df$Time.point=="T1"),], 
-             aes(x=Spectral.slope, y=percent.change.DOC, color=Treatment)) +
-   scale_color_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("UV and microbes") +
-   geom_hline(yintercept=0, linetype="longdash", color = "gray") +
-  ylab("") +
-  xlab("Sr") +
-    coord_cartesian(ylim = c(-30,0))+
-  Fig.formatting
- 
- 
-
-```
-
-
-Generate dataframe for model outputs
-```{r}
-####Parametric output
-degra.sr.para.sums=as.data.frame(rbind(photo.sr.anova$pTerms.table, microbe.sr.anova$pTerms.table, total.sr.anova$pTerms.table))
-
-names(degra.sr.para.sums)[1]="df/edf"
-
-#create empty column for ref.df
-degra.sr.para.sums <- degra.sr.para.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: Treatment","Microbes-only Model: Treatment","UV and microbes Model: Treatment"), .before="df/edf")%>%
-  add_column(Ref.df = "-", .after="df/edf")
-  
-
-#####Smooth output
-degra.smooth.sr.sums=as.data.frame(rbind(photo.sr.anova$s.table, microbe.sr.anova$s.table, total.sr.anova$s.table))
-names(degra.smooth.sr.sums)[1]="df/edf"
-
-
-
-#create empty column for ref.df
-degra.smooth.sr.sums <- degra.smooth.sr.sums %>%
-  # Creating an empty column:
-  add_column(Model= c("UV-only Model: s(plant.mass):burned","UV-only Model: s(plant.mass):unburned","Microbes-only Model: s(plant.mass):burned","Microbes-only Model: s(plant.mass):unburned","UV and microbes Model: s(plant.mass):burned","UV and microbes Model: s(plant.mass):unburned"), .before="df/edf")
-
-#merge the dataframes
-degra.sr.mod.allsums=rbind(degra.sr.para.sums,degra.smooth.sr.sums)
-rownames(degra.sr.mod.allsums)<-c(1:9)
-
-write.csv(degra.sr.mod.allsums, "/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.sr.mod.allsums.csv")
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/degra.sr.mod.allsums.pdf", width = 9, height = 3)       # Export PDF
-grid.table(degra.sr.mod.allsums)
-dev.off()
-
-
-
-```
-compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
-
-degra.sr.mod.plot<-plot_grid(
-photo.sr.plot+ theme(legend.position = "none"),
-microbe.sr.plot+ theme(legend.position = "none"),
-total.sr.plot+ theme(legend.position = "none"), extract.legend,
-  rel_widths = c(8,8,8,3), ncol=4)
-
-degra.sr.mod.plot
-
-ggsave("figures/degra.sr.mod.plot.pdf", height=4, width=12)
-
-```
-compile raw plots and model-diff plots for final figures
-```{r DOC model plots compiled}
-
-all.degra.mod.plots<-plot_grid(
-degra.mod.plot+ theme(legend.position = "none"),
-degra.suva.mod.plot+ theme(legend.position = "none"),
-degra.hix.mod.plot+ theme(legend.position = "none"), nrow=3, rel_widths = c(8,8,8), labels = "AUTO")
-
-all.degra.mod.plots
-
-ggsave("figures/all.degra.mod.plots.pdf", height=12, width=12)
-
-```
-
-Comnine AIC and Mod sums for degradation
-```{r}
-library(gridExtra)
-#merge all the dataframes
-all.degra.mod.sums=rbind(degra.mod.allsums,degra.suva.mod.allsums,degra.hix.mod.allsums)
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.degra.mod.sums.pdf", width = 8.5, height = 7.8)       # Export PDF
-grid.table(all.degra.mod.sums, rows=NULL)
-dev.off()
-
-#merge all the dataframes
-all.degra.mod.AIC=rbind(AIC.degra.mod,AIC.degra.suva.mod,AIC.degra.hix.mod)
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.degra.mod.AIC.pdf", width = 6.5, height = 7.8)       # Export PDF
-grid.table(all.degra.mod.AIC, rows=NULL)
-dev.off()
-
-
-
-```
 
 Sage and Willow Decomposition Analysis
 ```{r Sage and Willow analysis and plots}
@@ -3757,7 +2903,6 @@ sage.mod.plot<-
   Fig.formatting
 
 sage.mod.plot
-
 
 
 ### Willow
@@ -3902,6 +3047,7 @@ dev.off()
 
 
 ```
+
 compile raw plots and model-diff plots for final figures
 ```{r DOC model plots compiled}
 
@@ -4090,132 +3236,6 @@ nrow=2)
 all.decomp.mod.plot
 
 ggsave("figures/all.decomp.mod.plot.pdf", height=8, width=8)
-
-```
-
-Amend numeric gradient to categorical factors (low/med/high plant biomass) for ANOVA
-
-```{r}
-
-#make a copy of existing DOC dataframe
-DOC.df2=data.frame(DOC.df)
-DOC.df2=DOC.df2[-(1:32),]
-
-#add categorical low/med/high biomass
-DOC.df2$plant.level=as.factor(ifelse(DOC.df2$plant.mass..g<=75, "Low",
-  ifelse (DOC.df2$plant.mass..g>=225, "High", "Medium"))) 
-#calculate group mean                                    
-DOC.df2$mean=ave(DOC.df2$DOC..mg.L, DOC.df2$plant.level)  
-#reorder levels
-DOC.df2$plant.level <- factor(DOC.df2$plant.level, levels = c("Low", "Medium","High"))
-levels(DOC.df2$plant.level)
-
-#new plot format
-Fig.formatting.boxplot<-(theme_classic()) +
-  theme(text=element_text(size=14),
-        legend.text.align = 0,
-        panel.border = element_rect(fill=NA, colour = "black", size=1),
-        aspect.ratio=1, 
-        axis.ticks.length=unit(0.25, "cm"),
-        axis.text.y=element_text(
-        margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm"), colour="black", size=12), 
-        axis.text.x=element_text(
-        margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm"), colour="black", size=12)) +
-  theme(legend.key.size = unit(0.4, "cm")) +
-  theme(aspect.ratio=1.3) +
-  theme(panel.spacing=unit(c(0), "pt"))
-
-#plot
-plot.mean_labels <- c(
-                    `T1` = "Day-10",
-                    `T2` = "Day-31",
-                    `T3` = "Day-59",
-                    `T4` = "Day-89"
-                    )
-
-p=ggplot(DOC.df2, aes(x=plant.level, y=sr, fill=Treatment)) + 
-  geom_boxplot()+
-  facet_grid(~Time.point,  labeller = as_labeller(plot.mean_labels))+
-  Fig.formatting.boxplot+
-  scale_color_manual(values = c("brown1", "mediumseagreen")) + 
-  scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  ylab("DOC (mg/L)") +
-  xlab("plant biomass categories")
-
-p 
-
-DOC.df2 %>%
-  ggplot( aes(x=plant.level, y=hix, fill=Treatment)) +
-    geom_boxplot() +
-    theme(
-      legend.position="none",
-      plot.title = element_text(size=11)
-    ) +
-    ggtitle("Basic boxplot") +
-    xlab("")+
-     geom_jitter(color="black", size=0.4, alpha=0.9) +
-  facet_grid(~Time.point)+
-  Fig.formatting.boxplot
-
-
-library("ggpubr")
-ggline(DOC.df2, x = "plant.level", y = "DOC..mg.L", 
-       add = c("mean_se", "jitter"), 
-       order = c("Low", "Medium", "High"),
-       ylab = "DOC (mg/L)", xlab = "Category")
-
-```
-ANOVA of DOC
-
-```{r}
-#subset dataframe for analysis
-DOC.df2_T1=data.frame(DOC.df2[DOC.df2$Time.point=="T1",])
-DOC.df2_T2=data.frame(DOC.df2[DOC.df2$Time.point=="T2",])
-DOC.df2_T3=data.frame(DOC.df2[DOC.df2$Time.point=="T3",])
-DOC.df2_T4=data.frame(DOC.df2[DOC.df2$Time.point=="T4",])
-
-# Compute the analysis of variance Time 1
-aov.m1_T1.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T1)
-aov.m1_T1.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T1)
-aov.m1_T1.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T1)
-# Summary of the analysis
-summary(aov.m1_T1.high)
-plot(aov.m1_T1.med)
-
-# Compute the analysis of variance Time 2
-aov.m1_T2.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T2)
-aov.m1_T2.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T2)
-aov.m1_T2.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T2)
-# Summary of the analysis
-summary(aov.m1_T2.med)
-summary(aov.m1_T2.med)
-summary(aov.m1_T2.high)
-plot(aov.m1_T2.med)
-
-
-# Compute the analysis of variance Time 3
-aov.m1_T3.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T3)
-aov.m1_T3.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T3)
-aov.m1_T3.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T3)
-# Summary of the analysis
-summary(aov.m1_T3.high)
-plot(aov.m1_T1.med)
-
-
-# Compute the analysis of variance Time 4
-aov.m1_T4.low<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Low" , data=DOC.df2_T4)
-aov.m1_T4.med<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="Medium" , data=DOC.df2_T4)
-aov.m1_T4.high<- aov(DOC..mg.L ~ Treatment, subset=plant.level=="High" , data=DOC.df2_T4)
-# Summary of the analysis
-summary(aov.m1_T4.high)
-plot(aov.m1_T4.high)
-
-
-interaction <- aov(yield ~ fertilizer * density, data = crop.data)
-
-
-
-
 
 ```
 
