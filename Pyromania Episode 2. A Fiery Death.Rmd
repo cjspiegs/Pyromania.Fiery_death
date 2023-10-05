@@ -169,7 +169,7 @@ DOC.T0.mod.plot<-
              aes(x=plant.mass..g, y=DOC..mg.L, color=Treatment)) +
   scale_color_manual(values = c("brown1", "mediumseagreen")) + 
   scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  coord_cartesian(ylim=c(0, 5)) +
+  coord_cartesian(ylim=c(0, 60)) +
   ggtitle("Day-0") +
   ylab("DOC (mg/L)") +
   xlab("plant material (g)") +
@@ -444,13 +444,14 @@ extract.legend <- get_legend(
 
 
 DOC.alltimes<-plot_grid(
+  DOC.T0.mod.plot+ theme(legend.position = "none"),
   DOC.T1.mod.plot+ theme(legend.position = "none"),
   DOC.T2.mod.plot+ theme(legend.position = "none"),
   DOC.T3.mod.plot+ theme(legend.position = "none"),
   DOC.T4.mod.plot+ theme(legend.position = "none"), extract.legend,
-  rel_widths = c(8,8,8,8,3), ncol=5)
+  rel_widths = c(8,8,8,8,8,3), ncol=6)
 
-ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=12)
+ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=18)
 DOC.alltimes
 ```
 
@@ -786,7 +787,7 @@ DOC.df=DOC.df%>%
 
 
 SUVA analysis and plots
-```{r SUVA analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r SUVA analysis and plots, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.SUVA.T0.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -815,7 +816,7 @@ suva.diff.T0<-plot_difference(
 ###########  
 suva.T0.mod.plot<-
   plot_smooths(
-  model = m1.SUVA.T0.gam,
+  model = m3.SUVA.T0.gam,
   series = plant.mass..g,
 ) + 
   geom_point(data=DOC.df[(DOC.df$Time.point=="T0"),], 
@@ -1148,7 +1149,7 @@ sr.diff.T0<-plot_difference(
 ###########  
 sr.T0.mod.plot<-
   plot_smooths(
-  model = m1.sr.T0.gam,
+  model = m3.sr.T0.gam,
   series = plant.mass..g,
 ) + 
   geom_point(data=DOC.df[(DOC.df$Time.point=="T0"),], 
@@ -1157,7 +1158,6 @@ sr.T0.mod.plot<-
     scale_fill_manual(values = c("brown1", "mediumseagreen")) +
   ggtitle("Day-0") +
   ylab(expression('S'[italic(R)]))+
-  coord_cartesian(ylim = c(0,4))+
   xlab("plant material (g)") +
   Fig.formatting
 
@@ -1479,7 +1479,7 @@ hix.diff.T0<-plot_difference(
 ###########  
 hix.T0.mod.plot<-
   plot_smooths(
-  model = m1.hix.T0.gam,
+  model = m3.hix.T0.gam,
   series = plant.mass..g,
 ) + 
   geom_point(data=DOC.df[(DOC.df$Time.point=="T0"),], 
@@ -1487,6 +1487,7 @@ hix.T0.mod.plot<-
   scale_color_manual(values = c("brown1", "mediumseagreen")) + 
     scale_fill_manual(values = c("brown1", "mediumseagreen")) +
   ggtitle("Day-0") +
+    coord_cartesian(ylim = c(0,6))+
   ylab("HIX")+
   xlab("plant material (g)") +
   Fig.formatting
@@ -1807,15 +1808,15 @@ fr.diff.T0<-plot_difference(
 ###########  
 fr.T0.mod.plot<-
   plot_smooths(
-  model = m1.fr.T0.gam,
+  model = m3.fr.T0.gam,
   series = plant.mass..g,
 ) + 
   geom_point(data=DOC.df[(DOC.df$Time.point=="T0"),], 
              aes(x=plant.mass..g, y=fr, color=Treatment)) +
   scale_color_manual(values = c("brown1", "mediumseagreen")) + 
     scale_fill_manual(values = c("brown1", "mediumseagreen")) +
-  ggtitle("Day-0") +
-    ylab(expression("Freshness"~italic(alpha)~":"~italic(beta)))+
+  ggtitle("Day-0") + 
+  ylim(0.25,1.75)+
   xlab("plant material (g)") +
   Fig.formatting
 
@@ -2150,6 +2151,7 @@ fl.T0.mod.plot<-
   scale_color_manual(values = c("brown1", "mediumseagreen")) + 
     scale_fill_manual(values = c("brown1", "mediumseagreen")) +
   ggtitle("Day-0") +
+  coord_cartesian(ylim = c(0.5,2.5))+
     ylab("FI")+
   xlab("plant material (g)") +
   Fig.formatting
@@ -2168,6 +2170,7 @@ T1.fl.AIC
 
 summary(m1.fl.T1.gam)
 T1.fl.anova=anova(m1.fl.T1.gam)
+T1.fl.anova
 gam.check(m1.fl.T1.gam, rep=1000)
 draw(m1.fl.T1.gam)
 concrvity(m1.fl.T1.gam)
@@ -2447,6 +2450,20 @@ indices.diff.plot= plot_grid(suva.mod.diffs, sr.mod.diffs, hix.mod.diffs, fr.mod
 indices.diff.plot
 ggsave("figures/indices.diff.plot.pdf", height=18, width=14)
 
+#### Day 0 baseline indicies
+
+day0_index.baseline.plot = plot_grid(
+  suva.T0.mod.plot+ theme(legend.position = "none"),
+  sr.T0.mod.plot+ theme(legend.position = "none"),
+  hix.T0.mod.plot+ theme(legend.position = "none"),
+  fr.T0.mod.plot+ theme(legend.position = "none"),
+  fl.T0.mod.plot+ theme(legend.position = "none"),
+  extract.legend,
+  rel_widths = c(8,8,8,8,8,3), nrow=6)
+day0_index.baseline.plot
+ggsave("figures/day0_index.baseline.plot.pdf", height=18, width=14)
+
+
 ```
 
 
@@ -2663,7 +2680,7 @@ photo.mod.plot<-
   ggtitle("UV-only") +
   ylab("Change DOC (%)") +
   xlab("plant material (g)") +
-    coord_cartesian(ylim = c(-40,10))+
+    coord_cartesian(ylim = c(-30,10))+
   Fig.formatting
 
 photo.mod.plot
@@ -2698,7 +2715,7 @@ microbe.mod.plot<-
   ggtitle("microbes-only") +
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
-   coord_cartesian(ylim = c(-40,10))+
+   coord_cartesian(ylim = c(-30,10))+
   xlab("plant material (g)") +
   Fig.formatting
 
@@ -2737,7 +2754,7 @@ total.mod.plot<-
   ggtitle("UV and microbes") +
    geom_hline(yintercept=0, linetype="longdash", color = "gray") +
   ylab("Change DOC (%)") +
-  coord_cartesian(ylim = c(-40,10))+
+  coord_cartesian(ylim = c(-30,10))+
   xlab("plant material (g)") +
   Fig.formatting
 
@@ -2812,6 +2829,23 @@ dev.off()
 
 ```
 
+degra mod plots
+```{r}
+
+degra.mod.plots = plot_grid(
+  photo.mod.plot + theme(legend.position = "none"),
+  microbe.mod.plot + theme(legend.position = "none"),
+  total.mod.plot + theme(legend.position = "none" ),
+  extract.legend,
+  rel_widths = c(8,8,8,3), nrow = 1)
+
+degra.mod.plots
+
+ggsave("figures/degra.mod.plots.pdf", height=4, width=10)
+
+
+
+```
 
 
 Sage and Willow Decomposition Analysis
@@ -3221,6 +3255,9 @@ dev.off()
 
 
 ```
+
+
+
 compile raw plots and model-diff plots for final figures
 ```{r model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 
