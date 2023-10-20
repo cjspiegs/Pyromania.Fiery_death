@@ -156,7 +156,9 @@ DOC.diff.T0<-plot_difference(
   m1.DOC.T0.gam,
   series = plant.mass..g,
   difference = list(Treatment = c("burned", "unburned"))
-)
+) +
+  coord_cartesian(ylim = c(-10,13))+
+  Fig.formatting
 
 ###########  
 #plot for the model output on rawdata
@@ -458,13 +460,14 @@ DOC.alltimes
 
 ```{r DOC mod diffs, fig.dim=c(12,3), fig.cap="**Figure**. Model effects from GAMs with differences between smoothers for DOC concentration across time in treatments receiving burned and unburned plant material. The areas in pink show where there are significant differences between the two smoothers, indicating treatment effects."}
 DOC.mod.diffs<-plot_grid(
-  DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("DOC - Day-10"),
+  DOC.diff.T0+ theme(legend.position = "none")+ ggtitle("Day-0"),
+  DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("Day-10"),
   DOC.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
   DOC.diff.T3+ theme(legend.position = "none")+ ggtitle("Day-59"),
   DOC.diff.T4+ theme(legend.position = "none")+ ggtitle("Day-89"),
-  rel_widths = c(8,8,8,8), ncol=4)
-
-ggsave("figures/DOC.mod.diffs.pdf", height=4, width=12)
+  rel_widths = c(8,8,8,8,8), ncol=5)
+DOC.mod.diffs
+ggsave("figures/DOC.mod.diffs.pdf", height=4, width=16)
 
 
 ```
@@ -2788,6 +2791,46 @@ grid.table(AIC.degra.mod, rows=NULL)
 dev.off()
 
 
+```
+calculate effect size
+```{r}
+install.packages("effectsize")
+r_squared_microbes <- summary(m1.microbe.perc)$r.sq
+r_squared_total <- summary(m1.total.perc)$r.sq
+r_squared_microbes
+r_squared_total
+# Assuming you have already fitted your GAM model m1.photo.perc
+
+# Create a range of values for the predictor of interest (plant.mass..g)
+plant.mass.values <- c(0, 5, 10, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 300, 400)
+effect_sizes <- numeric(length(plant.mass.values))
+
+# Generate partial effect predictions for the UV-only microbes treatment
+# Loop through the specific plant.mass..g values
+for (i in 1:length(plant.mass.values)) {
+  # Generate partial effect prediction for the UV-only microbes treatment at each plant.mass..g value
+  uv_microbes_effect <- predict(m1.photo.perc, newdata = data.frame(Treatment = "UV-only microbes", plant.mass..g = plant.mass.values[i]), type = "link")
+  m1.microbe.perc
+  # Calculate the effect size by taking the difference in predicted values between "UV-only microbes" and a reference group
+  effect_size <- uv_microbes_effect$fit - predict(m1.total.perc, newdata = data.frame(Treatment = "microbes-only", plant.mass..g = plant.mass.values[i]), type = "link")
+  
+  # Store the effect size in the vector
+  effect_sizes[i] <- effect_size
+}
+# Calculate the standard errors for the predictions
+se_uv_microbes_effect <- sqrt(uv_microbes_effect$se.fit^2)
+
+# Calculate the effect size by taking the difference in predicted values
+# between "UV-only microbes" and a reference group (e.g., "microbes-only")
+effect_size <- uv_microbes_effect$fit - predict(m1.photo.perc, newdata = data.frame(Treatment = "microbes-only", plant.mass..g = plant.mass.range), type = "link")
+
+# Plot the partial effect with confidence intervals
+ggplot(data = data.frame(plant.mass..g = plant.mass.range, effect_size = effect_size, se = se_uv_microbes_effect)) +
+  geom_line(aes(x = plant.mass..g, y = effect_size), color = "blue", size = 1) +
+  geom_ribbon(aes(x = plant.mass..g, ymin = effect_size - 1.96 * se, ymax = effect_size + 1.96 * se), fill = "blue", alpha = 0.2) +
+  labs(x = "Plant Mass (g)", y = "Effect Size") +
+  ggtitle("Effect Size of UV-only Microbes Treatment") +
+  theme_minimal()
 ```
 
 Generate dataframe for model outputs
