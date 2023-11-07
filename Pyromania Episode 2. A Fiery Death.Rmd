@@ -424,7 +424,7 @@ dev.off()
 ```
 
 DOC model plot 
-```{r DOC model plot}
+```{r DOC model plot, fig.dim=c(10,3)}
 ###### compile the plots with effect plots}
 
 extract.legend <- get_legend(
@@ -443,8 +443,9 @@ DOC.alltimes<-plot_grid(
 ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=18)
 DOC.alltimes
 ```
+
 DOC diff plot
-```{r DOC diff plot}
+```{r DOC diff plot, fig.dim=c(10,3)}
 DOC.mod.diffs<-plot_grid(
   DOC.diff.T0+ theme(legend.position = "none")+ ggtitle("Day-0"),
   DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("Day-10"),
@@ -457,6 +458,7 @@ ggsave("figures/DOC.mod.diffs.pdf", height=4, width=16)
 
 
 ```
+
 Import all UVBIO files
 ```{r UVBIO, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ##### grab files in a list
@@ -546,6 +548,7 @@ UVBIO.df$Burn.Filt.UV<-interaction(UVBIO.df$Treatment, UVBIO.df$Filter.Trt, UVBI
 UVBIO.df$Filt.UV<-interaction(UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
 
 ```
+
 Import fluorescence and UV-vis absorbance index files. Begin with SUVA.
 ```{r SUVA all times, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ###### SUVA Time point 0 
@@ -749,7 +752,6 @@ DOC.df=DOC.df%>%
     mutate_if(is.character,as.factor)
 
 ```
-
 
 SUVA analysis
 ```{r SUVA analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -1054,7 +1056,7 @@ dev.off()
 ```
 
 SUVA model plot
-```{r SUVA model plots}
+```{r SUVA model plots, fig.dim=c(10,3)}
 extract.legend <- get_legend(
   # create some space to the left of the legend
   DOC.T1.mod.plot + theme(legend.box.margin = margin(0, 0, 0, 10)))
@@ -1072,7 +1074,7 @@ ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
 ```
 
 SUVA diff plot
-```{r SUVA diff plots}
+```{r SUVA diff plots, fig.dim=c(10,3)}
 suva.mod.diffs<-plot_grid(
   suva.diff.T1+ theme(legend.position = "none")+ ggtitle("SUVA - Day-10"),
   suva.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1391,7 +1393,7 @@ dev.off()
 ```
 
 Sr model plot
-```{r Sr model plots}
+```{r Sr model plots, fig.dim=c(10,3)}
 sr.alltimes<-plot_grid(
   sr.T1.mod.plot+ theme(legend.position = "none"),
   sr.T2.mod.plot+ theme(legend.position = "none"),
@@ -1404,7 +1406,7 @@ ggsave("figures/sr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Sr diff plot
-```{r Sr diff plots}
+```{r Sr diff plots, fig.dim=c(10,3)}
 sr.mod.diffs<-plot_grid(
   sr.diff.T1+ theme(legend.position = "none")+ ggtitle("Sr - Day-10"),
   sr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1415,7 +1417,6 @@ sr.mod.diffs<-plot_grid(
 sr.mod.diffs
 ggsave("figures/sr.mod.diffs.pdf", height=4, width=12)
 ```
-
 
 HIX analysis 
 ```{r HIX analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -1720,9 +1721,8 @@ grid.table(hix.mod.allsums, rows= NULL)
 dev.off()
 ```
 
-
 HIX model plot
-```{r HIX model plot}
+```{r HIX model plot, fig.dim=c(10,3)}
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
     hix.T2.mod.plot+ theme(legend.position = "none"),
@@ -1735,7 +1735,7 @@ ggsave("figures/hix.alltimes.mod.pdf", height=4, width=12)
 ```
 
 HIX diff plot
-```{r HIX diff plot}
+```{r HIX diff plot, fig.dim=c(10,3)}
 hix.mod.diffs<-plot_grid(
   hix.diff.T1+ theme(legend.position = "none")+ ggtitle("HIX - Day-10"),
   hix.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1746,7 +1746,6 @@ hix.mod.diffs<-plot_grid(
 hix.mod.diffs
 ggsave("figures/hix.mod.diffs.pdf", height=4, width=12)
 ```
-
 
 Fr analysis
 ```{r Freshness analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -1984,6 +1983,7 @@ fr.T4.mod.plot<-
   Fig.formatting
 
 ```
+
 Fr output
 ```{r Freshness output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -2052,7 +2052,7 @@ dev.off()
 ```
 
 Fr model plot
-```{r Freshness model plots}
+```{r Freshness model plots, fig.dim=c(10,3)}
 fr.alltimes<-plot_grid(
   fr.T1.mod.plot+ theme(legend.position = "none"),
     fr.T2.mod.plot+ theme(legend.position = "none"),
@@ -2065,7 +2065,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Fr diff plot
-```{r Freshness diff plots}
+```{r Freshness diff plots, fig.dim=c(10,3)}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
   fr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2076,7 +2076,6 @@ fr.mod.diffs<-plot_grid(
 fr.mod.diffs
 ggsave("figures/fr.mod.diffs.pdf", height=4, width=12)
 ```
-
 
 Fl analysis
 ```{r Fl analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -2383,7 +2382,7 @@ dev.off()
 ```
 
 Fl model plot
-```{r Fl model plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r Fl model plots, fig.dim=c(10,3)}
 fl.alltimes<-plot_grid(
   fl.T1.mod.plot+ theme(legend.position = "none"),
     fl.T2.mod.plot+ theme(legend.position = "none"),
@@ -2396,7 +2395,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Fl diff plot
-```{r Fl diff plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r Fl diff plots, fig.dim=c(10,3)}
 fl.mod.diffs<-plot_grid(
   fl.diff.T1+ theme(legend.position = "none")+ ggtitle("FI - Day-10"),
   fl.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2407,7 +2406,6 @@ fl.mod.diffs<-plot_grid(
 fl.mod.diffs
 ggsave("figures/fl.mod.diffs.pdf", height=4, width=12)
 ```
-
 
 Compile all indices into one plot
 ```{r All indices model plots, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -2436,6 +2434,7 @@ ggsave("figures/day0_index.baseline.plot.pdf", height=18, width=14)
 
 
 ```
+
 Create UVBIO df
 ```{r UVBIO import, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 #+UV/+Bio=A
@@ -2601,7 +2600,6 @@ degra_t1.burned.df=degra_t1.df[degra_t1.df$Treatment=="burned",]
 degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
 
 ```
-
 
 UVBIO analysis
 ```{r UVBIO analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -2808,7 +2806,7 @@ dev.off()
 ```
 
 UVBIO model plot
-```{r UVBIO model plots, collapse=TRUE, result='hide'}
+```{r UVBIO model plots, fig.dim=c(10,3)}
 
 degra.mod.plots = plot_grid(
   photo.mod.plot + theme(legend.position = "none"),
@@ -3157,7 +3155,7 @@ dev.off()
 ```
 
 Sage and willow model plot
-```{r Sage and willow model plot}
+```{r Sage and willow model plot, fig.dim=c(10,3)}
 
 decomp.compare.mod.plot<-plot_grid(
 compare.burned.mod.plot+ theme(legend.position = "none"),
@@ -3229,7 +3227,7 @@ dev.off()
 ```
 
 Sage and willow model plot
-```{r Sage and Willow plots}
+```{r Sage and Willow plots, fig.dim=c(10,3)}
 
 decomp.mod.plot<-plot_grid(
 sage.mod.plot+ theme(legend.position = "none"),
@@ -3241,8 +3239,9 @@ decomp.mod.plot
 ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 
 ```
+
 Combined sage and willow plots
-```{r Sage and willow model plots combined}
+```{r Sage and willow model plots combined, fig.dim=c(10,3)}
 
 all.decomp.mod.plot<-plot_grid(
 decomp.mod.plot+ theme(legend.position = "none"),
