@@ -8,7 +8,7 @@ CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<s
   
 
 <p align="center">
-  <img align="center" src="https://github.com/cbwall/Pyromania/blob/main/output/Fig1.%20Pyro%20schematic.jpg" width="65%" height="60%">
+  <img align="center" src="https://github.com/cbwall/Pyromania/blob/main/output/Fig S1 design.png" width="65%" height="60%">
 </p>
   
   
