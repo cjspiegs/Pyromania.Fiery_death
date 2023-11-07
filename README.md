@@ -1,4 +1,4 @@
-## Pyromania  
+## Pyromania: Life after a fiery death  
 
 CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<sup>2</sup>, CH Tran<sup>1</sup>, CC Symons<sup>3</sup>, JB Shurin<sup>1</sup>
 
