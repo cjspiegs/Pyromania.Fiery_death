@@ -1,6 +1,6 @@
 ---
 title: "Pyromania—Life after a fiery death: fire and plant biomass loading affect dissolved organic matter in experimental ponds"
-author: "CJ Spiegel et al. 2023, accepted at Global Change Biology"
+author: "CJ Spiegel et al. 2023, Global Change Biology"
 date: "11/06/2023"
 output:
   html_document:
@@ -11,10 +11,11 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '4'
+  editor_options:
+      chunk_output_type: console
 ---
 ### Project overview
 The goal of the Pyromania project is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic mesocosms and ran the experiment for ~90d in 2021-2022.   
-
 
 
 **DATA SETS**  
@@ -59,10 +60,9 @@ Fig.formatting<-(theme_classic()) +
 
 
 ```
-
-###DOC  
-import and for loop to clean up all files and make stacked data in single df
-```{r DOC import}
+ 
+Import DOC files
+```{r DOC import, collapse=TRUE, result='hide'}
 ## import treatment IDs
 IDs<-read.csv("data/treatment.IDs.csv")
 
@@ -118,9 +118,8 @@ DOC.df<- DOC.df %>%
 
 DOC.df$Treatment<-as.factor(DOC.df$Treatment)
 ```
-DOC analysis: 
+**A Quick note on GAMS**
 
-- notes on GAMS....
 Note that fitting via restricted maximum likelihood (REML) is advised to give stable results. Fitting the smoothing parameter (sp) to user defined levels not advisable (but certainly is done). Number of basis functions important as well, small # of basis functions (k) will limit wiggliness (and make the model more linear than should be). This wiggliness is set by using the k values. Don't want too high, or too low... 
 
 When using the non-linear smoothing, this is the s(xxxx). Can add a new predictor by adding another smooth function with s(x1) + s(x2). When the variable is inside the smooth function, this is to account for the nonlinear shape. Two smoothing together and you have ADDITIVE Nonlinear modeling. Not all variables need to be non-linear, but adding a predictor outside of the s() then this is allowing for linearity. 
@@ -131,7 +130,8 @@ Factor-smooth interaction also an option, this is when s(x1 by = fac), this sets
 
 EDF - effective degrees of freedom, equate with wiggliness, with edf =1 as a straight line, and higher edfs as more wiggly. GAM smoother significance is described as not being able to draw a horizontal line through the data. Always check concurvity, which is the collinearity with models from 0-1.
 
-```{r DOC analysis and individual plots, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
+DOC analysis
+```{r DOC analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.DOC.T0.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -387,8 +387,8 @@ dev.off()
 
 ```
 
-Generate dataframe for model outputs
-```{r}
+DOC output
+```{r DOC output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide' }
 ####Parametric output
 DOC.para.sums=as.data.frame(rbind(T1.DOC.anova$pTerms.table, T2.DOC.anova$pTerms.table, T3.DOC.anova$pTerms.table, T4.DOC.anova$pTerms.table))
 names(DOC.para.sums)[1]="df/edf"
@@ -423,8 +423,8 @@ dev.off()
 
 ```
 
-DOC: compile raw plots and model-diff plots for final figures
-```{r DOC all figures, fig.dim=c(13,5), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
+DOC model plot 
+```{r DOC model plot}
 ###### compile the plots with effect plots}
 
 extract.legend <- get_legend(
@@ -443,9 +443,8 @@ DOC.alltimes<-plot_grid(
 ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=18)
 DOC.alltimes
 ```
-
-
-```{r DOC mod diffs, fig.dim=c(12,3), fig.cap="**Figure**. Model effects from GAMs with differences between smoothers for DOC concentration across time in treatments receiving burned and unburned plant material. The areas in pink show where there are significant differences between the two smoothers, indicating treatment effects."}
+DOC diff plot
+```{r DOC diff plot}
 DOC.mod.diffs<-plot_grid(
   DOC.diff.T0+ theme(legend.position = "none")+ ggtitle("Day-0"),
   DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("Day-10"),
@@ -458,10 +457,8 @@ ggsave("figures/DOC.mod.diffs.pdf", height=4, width=16)
 
 
 ```
-
-
-UVBIO files: DOC degradation
-```{r UVBIO import}
+Import all UVBIO files
+```{r UVBIO, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ##### grab files in a list
 UVBio.files <- list.files(path="/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/UVBIO", pattern = "csv$", full.names = T)
 UVBio.files
@@ -549,13 +546,9 @@ UVBIO.df$Burn.Filt.UV<-interaction(UVBIO.df$Treatment, UVBIO.df$Filter.Trt, UVBI
 UVBIO.df$Filt.UV<-interaction(UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
 
 ```
-
-
-###SUVA 
-SUVA calculations
-Time point 0
-```{r}
-#load file and rearrange
+Import fluorescence and UV-vis absorbance index files. Begin with SUVA.
+```{r SUVA all times, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
+###### SUVA Time point 0 
 
 suva.t0.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/Results_T0.csv")
 suva.t0.df$Sample.Name=gsub("\\..*", "", suva.t0.df$Sample.Name) 
@@ -573,11 +566,9 @@ suva.t0.df$plant.mass..g=IDs$plant.mass..g
 
 #calculate SUVA
 suva.t0.df$SUVA=(suva.t0.df[suva.t0.df$Tank,]$abs254/suva.t0.df[suva.t0.df$Tank,]$DOC..mg.L)*100
-```
 
-Time point 1
-```{r}
-#load file and rearrange
+
+###### SUVA Time point 1 
 library(dplyr)
 
 suva.t1.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/Results_T1.csv")
@@ -598,11 +589,8 @@ suva.t1.df$plant.mass..g=IDs$plant.mass..g
 
 #calculate SUVA
 suva.t1.df$SUVA=(suva.t1.df[suva.t1.df$Tank,]$abs254/suva.t1.df[suva.t1.df$Tank,]$DOC..mg.L)*100
-```
 
-Time point 2 
-```{r}
-#load file and rearrange
+###### SUVA Time point 2 
 suva.t2.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/Results_T2_d1A.edit.csv")
 names(suva.t2.df)[1]="Tank"
 suva.t2.df$Tank=gsub("TA", "", suva.t2.df$Tank) 
@@ -620,10 +608,7 @@ suva.t2.df$plant.mass..g=IDs$plant.mass..g
 #calculate SUVA
 suva.t2.df$SUVA=(suva.t2.df[suva.t2.df$Tank,]$abs254/suva.t2.df[suva.t2.df$Tank,]$DOC..mg.L)*100
 
-```
-
-Time point 3 
-```{r}
+###### SUVA Time point 3 
 suva.t3.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/Results_T3.csv")
 names(suva.t3.df)[1]="Tank"
 suva.t3.df$Tank=gsub("TA", "", suva.t3.df$Tank) 
@@ -643,10 +628,7 @@ class(suva.t3.df$DOC..mg.L)
 #calculate SUVA
 suva.t3.df$SUVA=(suva.t3.df[suva.t3.df$Tank,]$abs254/suva.t3.df[suva.t3.df$Tank,]$DOC..mg.L)*100
 
-```
-
-Time point 4
-```{r}
+###### SUVA Time point 4
 suva.t4.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/Results_T4.csv")
 names(suva.t4.df)[1]="Tank"
 suva.t4.df$Tank=gsub("TA", "", suva.t4.df$Tank) 
@@ -664,16 +646,12 @@ suva.t4.df$plant.mass..g=IDs$plant.mass..g
 #calculate SUVA
 suva.t4.df$SUVA=(suva.t4.df[suva.t4.df$Tank,]$abs254/suva.t4.df[suva.t4.df$Tank,]$DOC..mg.L)*100
 
-```
-
-Combine all SUVA time points 
-```{r}
+###### Combine all SUVA time points 
 suva.df=rbind(suva.t0.df, suva.t1.df, suva.t2.df, suva.t3.df, suva.t4.df)
 ```
 
-
-Other indices
-```{r}
+Import the rest of the index files
+```{r other indicies, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 # Time 0
 index.T0.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/T0_indices.csv")
 index.T0.df$Time.point="T0"
@@ -695,7 +673,6 @@ index.T3.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEM
 index.T3.df$Time.point="T3"
 index.T3.df=index.T3.df[-c(7:11,13,14)]
 
-
 #Time 4
 index.T4.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/EEMs/T4_indices.csv")
 index.T4.df$Time.point="T4"
@@ -705,11 +682,9 @@ index.T4.df=index.T4.df[-c(7:11,13,14)]
 index.df=rbind(index.T0.df, index.T1.df, index.T2.df, index.T3.df, index.T4.df)
 ```
 
-Add these new metrics to DOC df
-import and do a loop to clean up all files and make stacked data in single df
-```{r}
-
-#Combine files from loop to single df
+Add them to original DOC df
+```{r new DOC df, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
+#import and do a loop to clean up all files and make stacked data in single df
 DOC_T0$SUVA=suva.df[suva.df$Time.point=="T0",]$SUVA
 DOC_T1$SUVA=suva.df[suva.df$Time.point=="T1",]$SUVA
 DOC_T2$SUVA=suva.df[suva.df$Time.point=="T2",]$SUVA
@@ -776,8 +751,8 @@ DOC.df=DOC.df%>%
 ```
 
 
-SUVA analysis and plots
-```{r SUVA}
+SUVA analysis
+```{r SUVA analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.SUVA.T0.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -1042,8 +1017,8 @@ dev.off()
 
 ```
 
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+SUVA output
+```{r SUVA output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 suva.para.sums=as.data.frame(rbind(T1.suva.anova$pTerms.table, T2.suva.anova$pTerms.table, T3.suva.anova$pTerms.table, T4.suva.anova$pTerms.table))
 names(suva.para.sums)[1]="df/edf"
@@ -1078,9 +1053,8 @@ dev.off()
 
 ```
 
-compile raw plots and model-diff plots for final figures
-```{r SUVA model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
-
+SUVA model plot
+```{r SUVA model plots}
 extract.legend <- get_legend(
   # create some space to the left of the legend
   DOC.T1.mod.plot + theme(legend.box.margin = margin(0, 0, 0, 10)))
@@ -1095,7 +1069,10 @@ suva.alltimes<-plot_grid(
 
 suva.alltimes
 ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
+```
 
+SUVA diff plot
+```{r SUVA diff plots}
 suva.mod.diffs<-plot_grid(
   suva.diff.T1+ theme(legend.position = "none")+ ggtitle("SUVA - Day-10"),
   suva.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1107,8 +1084,8 @@ suva.mod.diffs
 ggsave("figures/suva.mod.diffs.pdf", height=4, width=12)
 ```
 
-Sr analysis and plots
-```{r SUVA analysis and plots}
+Sr analysis 
+```{r Sr analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.sr.T0.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -1376,8 +1353,8 @@ grid.table(AIC.sr.mod, rows=NULL)
 dev.off()
 ```
 
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Sr output
+```{r Sr output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 sr.para.sums=as.data.frame(rbind(T1.sr.anova$pTerms.table, T2.sr.anova$pTerms.table, T3.sr.anova$pTerms.table, T4.sr.anova$pTerms.table))
 names(sr.para.sums)[1]="df/edf"
@@ -1413,10 +1390,8 @@ dev.off()
 
 ```
 
-
-Sr: compile raw plots and model-diff plots for final figures
-```{r sr model}
-
+Sr model plot
+```{r Sr model plots}
 sr.alltimes<-plot_grid(
   sr.T1.mod.plot+ theme(legend.position = "none"),
   sr.T2.mod.plot+ theme(legend.position = "none"),
@@ -1426,7 +1401,10 @@ sr.alltimes<-plot_grid(
 
 sr.alltimes
 ggsave("figures/sr.alltimes.mod.pdf", height=4, width=12)
+```
 
+Sr diff plot
+```{r Sr diff plots}
 sr.mod.diffs<-plot_grid(
   sr.diff.T1+ theme(legend.position = "none")+ ggtitle("Sr - Day-10"),
   sr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1439,8 +1417,8 @@ ggsave("figures/sr.mod.diffs.pdf", height=4, width=12)
 ```
 
 
-HIX analysis and plots
-```{r HIX}
+HIX analysis 
+```{r HIX analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.hix.T0.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -1705,8 +1683,8 @@ dev.off()
 
 ```
 
-Generate dataframe for model outputs
-```{r }
+HIX output
+```{r HIX output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 hix.para.sums=as.data.frame(rbind(T1.hix.anova$pTerms.table, T2.hix.anova$pTerms.table, T3.hix.anova$pTerms.table, T4.hix.anova$pTerms.table))
 names(hix.para.sums)[1]="df/edf"
@@ -1743,9 +1721,8 @@ dev.off()
 ```
 
 
-HIX: compile raw plots and model-diff plots for final figures
-```{r hix}
-
+HIX model plot
+```{r HIX model plot}
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
     hix.T2.mod.plot+ theme(legend.position = "none"),
@@ -1755,7 +1732,10 @@ hix.alltimes<-plot_grid(
 
 hix.alltimes
 ggsave("figures/hix.alltimes.mod.pdf", height=4, width=12)
+```
 
+HIX diff plot
+```{r HIX diff plot}
 hix.mod.diffs<-plot_grid(
   hix.diff.T1+ theme(legend.position = "none")+ ggtitle("HIX - Day-10"),
   hix.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1768,8 +1748,8 @@ ggsave("figures/hix.mod.diffs.pdf", height=4, width=12)
 ```
 
 
-Freshness analysis and plots
-```{r Freshness analysis}
+Fr analysis
+```{r Freshness analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.fr.T0.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -2004,10 +1984,8 @@ fr.T4.mod.plot<-
   Fig.formatting
 
 ```
-
-
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Fr output
+```{r Freshness output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 fr.para.sums=as.data.frame(rbind(T1.fr.anova$pTerms.table, T2.fr.anova$pTerms.table, T3.fr.anova$pTerms.table, T4.fr.anova$pTerms.table))
 names(fr.para.sums)[1]="df/edf"
@@ -2073,9 +2051,8 @@ dev.off()
 
 ```
 
-Freshness: compile raw plots and model-diff plots for final figures
-```{r freshness model plots}
-
+Fr model plot
+```{r Freshness model plots}
 fr.alltimes<-plot_grid(
   fr.T1.mod.plot+ theme(legend.position = "none"),
     fr.T2.mod.plot+ theme(legend.position = "none"),
@@ -2085,7 +2062,10 @@ fr.alltimes<-plot_grid(
 
 fr.alltimes
 ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
+```
 
+Fr diff plot
+```{r Freshness diff plots}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
   fr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2098,8 +2078,8 @@ ggsave("figures/fr.mod.diffs.pdf", height=4, width=12)
 ```
 
 
-Fluorescence analysis and plots
-```{r fluorescence analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Fl analysis
+```{r Fl analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 library(mgcv)
 library(tidymv)
 ######## T0 model
@@ -2365,9 +2345,8 @@ dev.off()
 
 ```
 
-
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Fl output
+```{r Fl output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 fl.para.sums=as.data.frame(rbind(T1.fl.anova$pTerms.table, T2.fl.anova$pTerms.table, T3.fl.anova$pTerms.table, T4.fl.anova$pTerms.table))
 names(fl.para.sums)[1]="df/edf"
@@ -2403,9 +2382,8 @@ dev.off()
 
 ```
 
-Fluorescence: compile raw plots and model-diff plots for final figures
-```{r Fl model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
-
+Fl model plot
+```{r Fl model plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 fl.alltimes<-plot_grid(
   fl.T1.mod.plot+ theme(legend.position = "none"),
     fl.T2.mod.plot+ theme(legend.position = "none"),
@@ -2415,7 +2393,10 @@ fl.alltimes<-plot_grid(
 
 fl.alltimes
 ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
+```
 
+Fl diff plot
+```{r Fl diff plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 fl.mod.diffs<-plot_grid(
   fl.diff.T1+ theme(legend.position = "none")+ ggtitle("FI - Day-10"),
   fl.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2429,7 +2410,7 @@ ggsave("figures/fl.mod.diffs.pdf", height=4, width=12)
 
 
 Compile all indices into one plot
-```{r All indices figure, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r All indices model plots, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 
 indices.alltimes= plot_grid(suva.alltimes, sr.alltimes, hix.alltimes, fr.alltimes, fl.alltimes, nrow=5, rel_widths = c(8,8,8,8,8), labels = "AUTO")
 
@@ -2455,10 +2436,8 @@ ggsave("figures/day0_index.baseline.plot.pdf", height=18, width=14)
 
 
 ```
-
-
-Calculate photo, microbe, and total degradation:
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Create UVBIO df
+```{r UVBIO import, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 #+UV/+Bio=A
 #-UV/+Bio=B
 #+UV/-Bio=C
@@ -2624,8 +2603,8 @@ degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
 ```
 
 
-UVBIO models and plots
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+UVBIO analysis
+```{r UVBIO analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 library(mgcv)
 
 ###Just UV
@@ -2779,8 +2758,9 @@ dev.off()
 
 
 ```
-calculate effect size for degradation pathways
-```{r}
+
+UVBIO effect sizes
+```{r UVBIO effect size, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 library(effectsize)
 r_squared_microbes <- summary(m1.microbe.perc)$r.sq
 r_squared_total <- summary(m1.total.perc)$r.sq
@@ -2788,8 +2768,8 @@ r_squared_microbes
 r_squared_total
 ```
 
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+UVBIO output
+```{r UVBIO output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 degra.para.sums=as.data.frame(rbind(photo.anova$pTerms.table, microbe.anova$pTerms.table, total.anova$pTerms.table))
 names(degra.para.sums)[1]="df/edf"
@@ -2827,8 +2807,8 @@ dev.off()
 
 ```
 
-degra mod plots
-```{r}
+UVBIO model plot
+```{r UVBIO model plots, collapse=TRUE, result='hide'}
 
 degra.mod.plots = plot_grid(
   photo.mod.plot + theme(legend.position = "none"),
@@ -2841,13 +2821,10 @@ degra.mod.plots
 
 ggsave("figures/degra.mod.plots.pdf", height=4, width=10)
 
-
-
 ```
 
-
-Sage and Willow Decomposition Analysis
-```{r Sage and Willow analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Sage and willow analysis
+```{r Sage and willow analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 #load file
 plant.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania2/data/decomp.weights.csv")
 plant.df=plant.df[-c(61:82), ]
@@ -3030,8 +3007,8 @@ dev.off()
 
 ```
 
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Sage and willow output
+```{r Sage and willow between output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 decomp.para.sums=as.data.frame(rbind(sage.anova$pTerms.table, willow.anova$pTerms.table))
 names(decomp.para.sums)[1]="df/edf"
@@ -3067,9 +3044,8 @@ dev.off()
 
 ```
 
-
-comparing sage and willow by fire treatment
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Sage and willow within treatment analysis
+```{r Sage and willow treatment analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 #compare mass loss between sage and willow by fire treatment---burned
 m1.compare.burned.gam=gam(perc.loss ~ plant.type + s(plant.specific.mass..g, by=plant.type), data=plant.df2, methods= "REML", select= T, subset= treatment == "burned")
 
@@ -3180,12 +3156,8 @@ dev.off()
 
 ```
 
-
-
-
-
-compile raw plots and model-diff plots for final figures
-```{r}
+Sage and willow model plot
+```{r Sage and willow model plot}
 
 decomp.compare.mod.plot<-plot_grid(
 compare.burned.mod.plot+ theme(legend.position = "none"),
@@ -3198,10 +3170,8 @@ ggsave("figures/decomp.comapre.mod.plot.pdf", height=4, width=12)
 
 ```
 
-
-
-Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Sage and willow within treatment output
+```{r Sage and willow within output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 decomp.compare.para.sums=as.data.frame(rbind(compare.burned.anova$pTerms.table, compare.unburned.anova$pTerms.table))
 names(decomp.compare.para.sums)[1]="df/edf"
@@ -3236,8 +3206,9 @@ dev.off()
 
 
 ```
-Comnine AIC and Mod sums for decomposition
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+
+Sage and willow combined output
+```{r Sage and Willow combined output, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 library(gridExtra)
 #merge all the dataframes
 all.decomp.mod.sums=rbind(decomp.mod.allsums,decomp.compare.mod.allsums)
@@ -3255,12 +3226,10 @@ pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.decomp.mod.A
 grid.table(all.decomp.mod.AIC, rows=NULL)
 dev.off()
 
-
-
 ```
 
-compile raw plots and model-diff plots for final figures
-```{r }
+Sage and willow model plot
+```{r Sage and Willow plots}
 
 decomp.mod.plot<-plot_grid(
 sage.mod.plot+ theme(legend.position = "none"),
@@ -3272,8 +3241,8 @@ decomp.mod.plot
 ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 
 ```
-compile raw plots and model-diff plots for final figures
-```{r model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+Combined sage and willow plots
+```{r Sage and willow model plots combined}
 
 all.decomp.mod.plot<-plot_grid(
 decomp.mod.plot+ theme(legend.position = "none"),
