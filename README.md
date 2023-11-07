@@ -28,4 +28,4 @@ The file directory contains folders and scripts (Rmd) to be run in RStudio. The 
      - *scripts* = contains pieces of scripts useful in analyses, generally integrated into Rmd
 
 ## Metadata
-Important data files to generate maps, figures, and run models can be foudn in the *data folder*.
+Important data files to generate figures, tables, and run models can be found in the *data folder*.
