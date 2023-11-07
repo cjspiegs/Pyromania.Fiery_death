@@ -1074,7 +1074,7 @@ ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
 ```
 
 SUVA diff plot
-```{r SUVA diff plots, fig.dim=c(13,3))}
+```{r SUVA diff plots, fig.dim=c(13,3)}
 suva.mod.diffs<-plot_grid(
   suva.diff.T1+ theme(legend.position = "none")+ ggtitle("SUVA - Day-10"),
   suva.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -3236,7 +3236,7 @@ dev.off()
 ```
 
 Sage and willow combined plot
-```{r Sage and Willow plots, fig.dim=c(18,6) }
+```{r Sage and Willow plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE }
 
 ##### combine all plots
 all.decomp.mod.plot<-plot_grid(
