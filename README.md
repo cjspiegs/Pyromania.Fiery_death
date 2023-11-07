@@ -8,7 +8,7 @@ CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<s
   
 
 <p align="center">
-  <img align="center" src="https://github.com/cjspiegs/Pyromania.Fiery_death/blob/main/figures/Fig%20S1%20design.png)" width="65%" height="60%">
+  <img align="center" src="https://github.com/cjspiegs/Pyromania.Fiery_death/blob/main/figures/Fig%20S1%20design.png" width="65%" height="60%">
 </p>
   
   
