@@ -1,7 +1,7 @@
 ---
 title: "Pyromania—Life after a fiery death: fire and plant biomass loading affect dissolved organic matter in experimental ponds"
-author: "CJ Spiegel et al. 2023, in review Global Change Biology"
-date: "08/01/2023"
+author: "CJ Spiegel et al. 2023, accepted at Global Change Biology"
+date: "11/06/2023"
 output:
   html_document:
     code_folding: hide
@@ -140,8 +140,6 @@ m2.DOC.T0.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point
 m3.DOC.T0.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
 T0.DOC.AIC<-AIC(m1.DOC.T0.gam, m2.DOC.T0.gam, m3.DOC.T0.gam)
-T0.DOC.AIC
-# best is smoother solo
 
 DOC.sum_T0=summary(m3.DOC.T0.gam)
 DOC.sum_T0=anova.gam(m3.DOC.T0.gam)
@@ -177,8 +175,6 @@ DOC.T0.mod.plot<-
   xlab("plant material (g)") +
   Fig.formatting
 
-DOC.T0.mod.plot
-
 ######## T1 model
 m1.DOC.T1.gam=gam(DOC..mg.L ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
@@ -187,8 +183,6 @@ m2.DOC.T1.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point
 m3.DOC.T1.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
 T1.DOC.AIC<-AIC(m1.DOC.T1.gam, m2.DOC.T1.gam, m3.DOC.T1.gam)
-T1.DOC.AIC
-# best is smooth by factor
 
 summary(m1.DOC.T1.gam)
 T1.DOC.anova=anova(m1.DOC.T1.gam)
@@ -234,8 +228,6 @@ m2.DOC.T2.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point
 m3.DOC.T2.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point=="T2", data = DOC.df, method = "REML")
 
 T2.DOC.AIC<-AIC(m1.DOC.T2.gam, m2.DOC.T2.gam, m3.DOC.T2.gam)
-T2.DOC.AIC
-# best is smooth by factor
 
 summary(m1.DOC.T2.gam)
 T2.DOC.anova=anova.gam(m1.DOC.T2.gam)
@@ -280,8 +272,6 @@ m2.DOC.T3.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point
 m3.DOC.T3.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point=="T3", data = DOC.df, method = "REML")
 
 T3.DOC.AIC<-AIC(m1.DOC.T3.gam, m2.DOC.T3.gam, m3.DOC.T3.gam)
-T3.DOC.AIC
-# best by factor smooth
 
 summary(m1.DOC.T3.gam)
 T3.DOC.anova=anova.gam(m1.DOC.T3.gam)
@@ -326,8 +316,7 @@ m2.DOC.T4.gam=gam(DOC..mg.L ~  Treatment + s(plant.mass..g), subset = Time.point
 m3.DOC.T4.gam=gam(DOC..mg.L ~  s(plant.mass..g), subset = Time.point=="T4", data = DOC.df, method = "REML")
 
 T4.DOC.AIC<-AIC(m1.DOC.T4.gam, m2.DOC.T4.gam, m3.DOC.T4.gam)
-T4.DOC.AIC
-# best is global
+
 summary(m3.DOC.T4.gam)
 T4.DOC.anova=anova(m1.DOC.T4.gam)
 gam.check(m3.DOC.T4.gam, rep=1000)
@@ -362,8 +351,7 @@ DOC.diff.T4<-plot_difference(
   coord_cartesian(ylim = c(-10,13))+
   Fig.formatting
 
-DOC.diff.T4
-
+#labels
 mod.DOC.rep<-rep(c(
               "Day 10: Treatment with by-factor smooth", 
               "Day 10: Treatment with global smooth", 
@@ -378,12 +366,12 @@ mod.DOC.rep<-rep(c(
               "Day 89: Treatment with global smooth", 
               "Day 89: global smooth"))
 
+#adding columns
 mod.DOC.column<- data.frame(mod.DOC.rep)
 AIC.DOC<-bind_rows(T1.DOC.AIC, T2.DOC.AIC, T3.DOC.AIC, T4.DOC.AIC)
 AIC.DOC.mod<-as.data.frame(cbind(mod.DOC.column, AIC.DOC))
 
 names(AIC.DOC.mod)[1]="Model"
-
 
 AIC.DOC.mod <- AIC.DOC.mod %>%
   # Creating an empty column:
@@ -411,7 +399,6 @@ DOC.para.sums <- DOC.para.sums %>%
   add_column(Model= c("Day 10 Model: Treatment","Day 31 Model: Treatment","Day 59 Model: Treatment","Day 89 Model: Treatment"), .before="df/edf")%>%
   add_column(Ref.df = "-", .after="df/edf")
   
-
 #####Smooth output
 DOC.smooth.sums=as.data.frame(rbind(T1.DOC.anova$s.table, T2.DOC.anova$s.table, T3.DOC.anova$s.table, T4.DOC.anova$s.table))
 names(DOC.smooth.sums)[1]="df/edf"
@@ -790,7 +777,7 @@ DOC.df=DOC.df%>%
 
 
 SUVA analysis and plots
-```{r SUVA analysis and plots, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
+```{r SUVA}
 ######## T0 model
 m1.SUVA.T0.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -832,7 +819,7 @@ suva.T0.mod.plot<-
   xlab("plant material (g)") +
   Fig.formatting
 
-
+suva.T0.mod.plot
 ######## T1 model
 m1.suva.T1.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T1", data = DOC.df, method = "REML")
 
@@ -1428,7 +1415,7 @@ dev.off()
 
 
 Sr: compile raw plots and model-diff plots for final figures
-```{r sr model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r sr model}
 
 sr.alltimes<-plot_grid(
   sr.T1.mod.plot+ theme(legend.position = "none"),
@@ -1453,7 +1440,7 @@ ggsave("figures/sr.mod.diffs.pdf", height=4, width=12)
 
 
 HIX analysis and plots
-```{r HIX analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r HIX}
 ######## T0 model
 m1.hix.T0.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -1719,7 +1706,7 @@ dev.off()
 ```
 
 Generate dataframe for model outputs
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r }
 ####Parametric output
 hix.para.sums=as.data.frame(rbind(T1.hix.anova$pTerms.table, T2.hix.anova$pTerms.table, T3.hix.anova$pTerms.table, T4.hix.anova$pTerms.table))
 names(hix.para.sums)[1]="df/edf"
@@ -1757,7 +1744,7 @@ dev.off()
 
 
 HIX: compile raw plots and model-diff plots for final figures
-```{r sr model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r hix}
 
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
@@ -1782,7 +1769,7 @@ ggsave("figures/hix.mod.diffs.pdf", height=4, width=12)
 
 
 Freshness analysis and plots
-```{r Freshness analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r Freshness analysis}
 ######## T0 model
 m1.fr.T0.gam=gam(fr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
 
@@ -2087,7 +2074,7 @@ dev.off()
 ```
 
 Freshness: compile raw plots and model-diff plots for final figures
-```{r sr model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r freshness model plots}
 
 fr.alltimes<-plot_grid(
   fr.T1.mod.plot+ theme(legend.position = "none"),
@@ -2112,7 +2099,7 @@ ggsave("figures/fr.mod.diffs.pdf", height=4, width=12)
 
 
 Fluorescence analysis and plots
-```{r Freshness analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r fluorescence analysis and plots, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 library(mgcv)
 library(tidymv)
 ######## T0 model
@@ -2417,7 +2404,7 @@ dev.off()
 ```
 
 Fluorescence: compile raw plots and model-diff plots for final figures
-```{r sr model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+```{r Fl model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 
 fl.alltimes<-plot_grid(
   fl.T1.mod.plot+ theme(legend.position = "none"),
@@ -2792,45 +2779,13 @@ dev.off()
 
 
 ```
-calculate effect size
+calculate effect size for degradation pathways
 ```{r}
-install.packages("effectsize")
+library(effectsize)
 r_squared_microbes <- summary(m1.microbe.perc)$r.sq
 r_squared_total <- summary(m1.total.perc)$r.sq
 r_squared_microbes
 r_squared_total
-# Assuming you have already fitted your GAM model m1.photo.perc
-
-# Create a range of values for the predictor of interest (plant.mass..g)
-plant.mass.values <- c(0, 5, 10, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 300, 400)
-effect_sizes <- numeric(length(plant.mass.values))
-
-# Generate partial effect predictions for the UV-only microbes treatment
-# Loop through the specific plant.mass..g values
-for (i in 1:length(plant.mass.values)) {
-  # Generate partial effect prediction for the UV-only microbes treatment at each plant.mass..g value
-  uv_microbes_effect <- predict(m1.photo.perc, newdata = data.frame(Treatment = "UV-only microbes", plant.mass..g = plant.mass.values[i]), type = "link")
-  m1.microbe.perc
-  # Calculate the effect size by taking the difference in predicted values between "UV-only microbes" and a reference group
-  effect_size <- uv_microbes_effect$fit - predict(m1.total.perc, newdata = data.frame(Treatment = "microbes-only", plant.mass..g = plant.mass.values[i]), type = "link")
-  
-  # Store the effect size in the vector
-  effect_sizes[i] <- effect_size
-}
-# Calculate the standard errors for the predictions
-se_uv_microbes_effect <- sqrt(uv_microbes_effect$se.fit^2)
-
-# Calculate the effect size by taking the difference in predicted values
-# between "UV-only microbes" and a reference group (e.g., "microbes-only")
-effect_size <- uv_microbes_effect$fit - predict(m1.photo.perc, newdata = data.frame(Treatment = "microbes-only", plant.mass..g = plant.mass.range), type = "link")
-
-# Plot the partial effect with confidence intervals
-ggplot(data = data.frame(plant.mass..g = plant.mass.range, effect_size = effect_size, se = se_uv_microbes_effect)) +
-  geom_line(aes(x = plant.mass..g, y = effect_size), color = "blue", size = 1) +
-  geom_ribbon(aes(x = plant.mass..g, ymin = effect_size - 1.96 * se, ymax = effect_size + 1.96 * se), fill = "blue", alpha = 0.2) +
-  labs(x = "Plant Mass (g)", y = "Effect Size") +
-  ggtitle("Effect Size of UV-only Microbes Treatment") +
-  theme_minimal()
 ```
 
 Generate dataframe for model outputs
@@ -3112,43 +3067,6 @@ dev.off()
 
 ```
 
-Comnine AIC and Mod sums for decomposition
-```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
-library(gridExtra)
-#merge all the dataframes
-all.decomp.mod.sums=rbind(decomp.mod.allsums,decomp.compare.mod.allsums)
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.decomp.mod.sums.pdf", width = 7, height = 3.7)       # Export PDF
-grid.table(all.decomp.mod.sums, rows=NULL)
-dev.off()
-
-#merge all the dataframes
-all.decomp.mod.AIC=rbind(AIC.decomp.mod, AIC.compare.decomp.mod)
-
-#convert dataframe into a table for export
-pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.decomp.mod.AIC.pdf", width = 5.3, height = 3.7)       # Export PDF
-grid.table(all.decomp.mod.AIC, rows=NULL)
-dev.off()
-
-
-
-```
-
-compile raw plots and model-diff plots for final figures
-```{r model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
-
-decomp.mod.plot<-plot_grid(
-sage.mod.plot+ theme(legend.position = "none"),
-willow.mod.plot+ theme(legend.position = "none"),
-  rel_widths = c(8,8), ncol=2)
-
-decomp.mod.plot
-
-ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
-
-```
-
 
 comparing sage and willow by fire treatment
 ```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
@@ -3262,6 +3180,26 @@ dev.off()
 
 ```
 
+
+
+
+
+compile raw plots and model-diff plots for final figures
+```{r}
+
+decomp.compare.mod.plot<-plot_grid(
+compare.burned.mod.plot+ theme(legend.position = "none"),
+compare.unburned.mod.plot+ theme(legend.position = "none"),
+ncol=2)
+
+decomp.compare.mod.plot
+
+ggsave("figures/decomp.comapre.mod.plot.pdf", height=4, width=12)
+
+```
+
+
+
 Generate dataframe for model outputs
 ```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 ####Parametric output
@@ -3298,23 +3236,42 @@ dev.off()
 
 
 ```
+Comnine AIC and Mod sums for decomposition
+```{r results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
+library(gridExtra)
+#merge all the dataframes
+all.decomp.mod.sums=rbind(decomp.mod.allsums,decomp.compare.mod.allsums)
+
+#convert dataframe into a table for export
+pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.decomp.mod.sums.pdf", width = 7, height = 3.7)       # Export PDF
+grid.table(all.decomp.mod.sums, rows=NULL)
+dev.off()
+
+#merge all the dataframes
+all.decomp.mod.AIC=rbind(AIC.decomp.mod, AIC.compare.decomp.mod)
+
+#convert dataframe into a table for export
+pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/all.decomp.mod.AIC.pdf", width = 5.3, height = 3.7)       # Export PDF
+grid.table(all.decomp.mod.AIC, rows=NULL)
+dev.off()
 
 
-
-compile raw plots and model-diff plots for final figures
-```{r model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
-
-decomp.compare.mod.plot<-plot_grid(
-compare.burned.mod.plot+ theme(legend.position = "none"),
-compare.unburned.mod.plot+ theme(legend.position = "none"),
-ncol=2)
-
-decomp.compare.mod.plot
-
-ggsave("figures/decomp.comapre.mod.plot.pdf", height=4, width=12)
 
 ```
 
+compile raw plots and model-diff plots for final figures
+```{r }
+
+decomp.mod.plot<-plot_grid(
+sage.mod.plot+ theme(legend.position = "none"),
+willow.mod.plot+ theme(legend.position = "none"),
+  rel_widths = c(8,8), ncol=2)
+
+decomp.mod.plot
+
+ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
+
+```
 compile raw plots and model-diff plots for final figures
 ```{r model plots compiled, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 
@@ -3328,4 +3285,3 @@ all.decomp.mod.plot
 ggsave("figures/all.decomp.mod.plot.pdf", height=8, width=8)
 
 ```
-
