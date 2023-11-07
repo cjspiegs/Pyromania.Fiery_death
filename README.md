@@ -1,5 +1,4 @@
-## Pyromania: Life after a fiery death  
-
+## Pyromania—Life After a Fiery Death: Fire and Plant Biomass Loading Affect Dissolved Organic Matter in Experimental Ponds. (2023). **Global Change Biology**_
 CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<sup>2</sup>, CH Tran<sup>1</sup>, CC Symons<sup>3</sup>, JB Shurin<sup>1</sup>
 
 <sup>1</sup>University of California, San Diego   
