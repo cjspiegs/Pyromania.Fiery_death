@@ -424,7 +424,7 @@ dev.off()
 ```
 
 DOC model plot 
-```{r DOC model plot, fig.dim=c(10,3)}
+```{r DOC model plot, fig.dim=c(13,3)}
 ###### compile the plots with effect plots}
 
 extract.legend <- get_legend(
@@ -445,7 +445,7 @@ DOC.alltimes
 ```
 
 DOC diff plot
-```{r DOC diff plot, fig.dim=c(10,3)}
+```{r DOC diff plot, fig.dim=c(13,3)}
 DOC.mod.diffs<-plot_grid(
   DOC.diff.T0+ theme(legend.position = "none")+ ggtitle("Day-0"),
   DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("Day-10"),
@@ -1056,7 +1056,7 @@ dev.off()
 ```
 
 SUVA model plot
-```{r SUVA model plots, fig.dim=c(10,3)}
+```{r SUVA model plots, fig.dim=c(13,3)}
 extract.legend <- get_legend(
   # create some space to the left of the legend
   DOC.T1.mod.plot + theme(legend.box.margin = margin(0, 0, 0, 10)))
@@ -1074,7 +1074,7 @@ ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
 ```
 
 SUVA diff plot
-```{r SUVA diff plots, fig.dim=c(10,3)}
+```{r SUVA diff plots, fig.dim=c(13,3))}
 suva.mod.diffs<-plot_grid(
   suva.diff.T1+ theme(legend.position = "none")+ ggtitle("SUVA - Day-10"),
   suva.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1393,7 +1393,7 @@ dev.off()
 ```
 
 Sr model plot
-```{r Sr model plots, fig.dim=c(10,3)}
+```{r Sr model plots, fig.dim=c(13,3)}
 sr.alltimes<-plot_grid(
   sr.T1.mod.plot+ theme(legend.position = "none"),
   sr.T2.mod.plot+ theme(legend.position = "none"),
@@ -1406,7 +1406,7 @@ ggsave("figures/sr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Sr diff plot
-```{r Sr diff plots, fig.dim=c(10,3)}
+```{r Sr diff plots, fig.dim=c(13,3)}
 sr.mod.diffs<-plot_grid(
   sr.diff.T1+ theme(legend.position = "none")+ ggtitle("Sr - Day-10"),
   sr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -1722,7 +1722,7 @@ dev.off()
 ```
 
 HIX model plot
-```{r HIX model plot, fig.dim=c(10,3)}
+```{r HIX model plot, fig.dim=c(13,3)}
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
     hix.T2.mod.plot+ theme(legend.position = "none"),
@@ -1735,7 +1735,7 @@ ggsave("figures/hix.alltimes.mod.pdf", height=4, width=12)
 ```
 
 HIX diff plot
-```{r HIX diff plot, fig.dim=c(10,3)}
+```{r HIX diff plot, fig.dim=c(13,3)}
 hix.mod.diffs<-plot_grid(
   hix.diff.T1+ theme(legend.position = "none")+ ggtitle("HIX - Day-10"),
   hix.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2052,7 +2052,7 @@ dev.off()
 ```
 
 Fr model plot
-```{r Freshness model plots, fig.dim=c(10,3)}
+```{r Freshness model plots, fig.dim=c(13,3)}
 fr.alltimes<-plot_grid(
   fr.T1.mod.plot+ theme(legend.position = "none"),
     fr.T2.mod.plot+ theme(legend.position = "none"),
@@ -2065,7 +2065,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Fr diff plot
-```{r Freshness diff plots, fig.dim=c(10,3)}
+```{r Freshness diff plots, fig.dim=c(13,3)}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
   fr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2382,7 +2382,7 @@ dev.off()
 ```
 
 Fl model plot
-```{r Fl model plots, fig.dim=c(10,3)}
+```{r Fl model plots, fig.dim=c(13,3)}
 fl.alltimes<-plot_grid(
   fl.T1.mod.plot+ theme(legend.position = "none"),
     fl.T2.mod.plot+ theme(legend.position = "none"),
@@ -2395,7 +2395,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 Fl diff plot
-```{r Fl diff plots, fig.dim=c(10,3)}
+```{r Fl diff plots, fig.dim=c(13,3)}
 fl.mod.diffs<-plot_grid(
   fl.diff.T1+ theme(legend.position = "none")+ ggtitle("FI - Day-10"),
   fl.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -3155,7 +3155,7 @@ dev.off()
 ```
 
 Sage and willow model plot
-```{r Sage and willow model plot, fig.dim=c(10,3)}
+```{r Sage and willow model plot, fig.dim=c(13,3)}
 
 decomp.compare.mod.plot<-plot_grid(
 compare.burned.mod.plot+ theme(legend.position = "none"),
@@ -3165,6 +3165,15 @@ ncol=2)
 decomp.compare.mod.plot
 
 ggsave("figures/decomp.comapre.mod.plot.pdf", height=4, width=12)
+
+decomp.mod.plot<-plot_grid(
+sage.mod.plot+ theme(legend.position = "none"),
+willow.mod.plot+ theme(legend.position = "none"),
+  rel_widths = c(8,8), ncol=2)
+
+decomp.mod.plot
+
+ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 
 ```
 
@@ -3226,23 +3235,10 @@ dev.off()
 
 ```
 
-Sage and willow model plot
-```{r Sage and Willow plots, fig.dim=c(10,3)}
+Sage and willow combined plot
+```{r Sage and Willow plots, fig.dim=c(18,6) }
 
-decomp.mod.plot<-plot_grid(
-sage.mod.plot+ theme(legend.position = "none"),
-willow.mod.plot+ theme(legend.position = "none"),
-  rel_widths = c(8,8), ncol=2)
-
-decomp.mod.plot
-
-ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
-
-```
-
-Combined sage and willow plots
-```{r Sage and willow model plots combined, fig.dim=c(10,3)}
-
+##### combine all plots
 all.decomp.mod.plot<-plot_grid(
 decomp.mod.plot+ theme(legend.position = "none"),
 decomp.compare.mod.plot+ theme(legend.position = "none"),
