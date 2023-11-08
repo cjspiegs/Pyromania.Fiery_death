@@ -443,7 +443,7 @@ dev.off()
 
 ### DOC model plot 
 
-```{r DOC model plot, fig.dim=c(13,5), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
+```{r DOC model plot, fig.dim=c(13,7), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
 
 ###### compile the plots with effect plots}
 
@@ -694,8 +694,11 @@ suva.df=rbind(suva.t0.df, suva.t1.df, suva.t2.df, suva.t3.df, suva.t4.df)
 Below are brief descriptions of each index:
 
 *Sr*: the ratio of the slope (SR) parameters (S275-295:S350-400) as a proxy for molecular weight (MW) (Helms et al. 2008).
+
 *HIX*: the humification index (HIX = ratio of areas under the emission curve at 435-480 nm and 300-345 nm plus 435-480 nm at an excitation wavelength 245 nm) that described the degree of humification (high HIX = more terrestrial humic-like material) (Zsolnay et al. 1999).
+
 *BIX*: the freshness index (BIX), representing the degree to which organic matter has undergone processing and degradation, as the ratio of emission intensity at 380 nm to the maximum emission intensity between 420 and 435 nm at excitation wavelength 310 nm (Parlanti 2000).
+
 *FI*: the fluorescence index (FI = emission intensity at 470 nm divided with that of 520 nm at 370 nm excitation) which indicated source material (microbial-precursor FI value ≈ 1.8 or terrestrial-precursor FI ≈ 1.3) (McKnight et al. 2001).
 
 ```{r other indicies, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -2501,6 +2504,7 @@ This is a large 5 x 4 figure with all fluorescence and UV-vis absorbance indices
 ```{r All indices model plots, fig.dim=c(13,18), fig.cap= "**Figure**. Changes in a: SUVA, b: spectral slope ratio, c: humification index, d: freshness index, and e: fluorescence index with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 indices.alltimes= plot_grid(suva.alltimes, sr.alltimes, hix.alltimes, fr.alltimes, fl.alltimes, nrow=5, rel_widths = c(8,8,8,8,8), labels = "AUTO")
+indices.alltimes
 
 ggsave("figures/indices.alltimes.pdf", height=18, width=14)
 
@@ -2519,7 +2523,7 @@ day0_index.baseline.plot = plot_grid(
   fl.T0.mod.plot+ theme(legend.position = "none"),
   extract.legend,
   rel_widths = c(8,8,8,8,8,3), nrow=6)
-day0_index.baseline.plot
+
 ggsave("figures/day0_index.baseline.plot.pdf", height=18, width=14)
 
 
@@ -3255,20 +3259,13 @@ pdf("/Users/Cody1/Desktop/GitHub/Pyromania2/output/Codys.tables/decomp.compare.m
 grid.table(AIC.compare.decomp.mod, rows=NULL)
 dev.off()
 
-
-
-```
-
-### Sage and willow within treatment model plot
-
-```{r Sage and willow model plot, fig.dim=c(13,5), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
-
+#### generate plots
 decomp.compare.mod.plot<-plot_grid(
 compare.burned.mod.plot+ theme(legend.position = "none"),
 compare.unburned.mod.plot+ theme(legend.position = "none"),
 ncol=2)
 
-decomp.compare.mod.plot
+
 
 ggsave("figures/decomp.comapre.mod.plot.pdf", height=4, width=12)
 
@@ -3277,11 +3274,13 @@ sage.mod.plot+ theme(legend.position = "none"),
 willow.mod.plot+ theme(legend.position = "none"),
   rel_widths = c(8,8), ncol=2)
 
-decomp.mod.plot
 
 ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 
+
+
 ```
+
 
 ### Sage and willow within treatment output
 This generates a table with GAM summaries.
@@ -3347,7 +3346,7 @@ dev.off()
 ### Sage and willow combined plot
 We can combine the two decomposition plots into one. This is the same as the plot above but the code uses plot_grid to combine them into a 2x2 panel figure.
 
-```{r Sage and Willow plots, fig.dim=c(13,18), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
+```{r Sage and Willow plots, fig.dim=c(13,10), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 ##### combine all plots
 all.decomp.mod.plot<-plot_grid(
