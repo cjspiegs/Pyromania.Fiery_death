@@ -443,7 +443,7 @@ dev.off()
 
 ### DOC model plot 
 
-```{r DOC model plot, fig.dim=c(13,5), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments.}
+```{r DOC model plot, fig.dim=c(13,5), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
 
 ###### compile the plots with effect plots}
 
@@ -467,7 +467,7 @@ DOC.alltimes
 ### DOC diff plot
 
 From the GAMs, we can plot exactly where the differences lie. 
-```{r DOC diff plot, fig.dim=c(13,5), fig.cap="**Figure**. Differences in dissolved organic carbon (DOC) concentration for fitted smooth functions between treatments (burned vs. unburned) across plant biomass. Difference in trends shown in red with approximate 95% confidence intervals.}
+```{r DOC diff plot, fig.dim=c(13,5), fig.cap="**Figure**. Differences in dissolved organic carbon (DOC) concentration for fitted smooth functions between treatments (burned vs. unburned) across plant biomass. Difference in trends shown in red with approximate 95% confidence intervals."}
 DOC.mod.diffs<-plot_grid(
   DOC.diff.T0+ theme(legend.position = "none")+ ggtitle("Day-0"),
   DOC.diff.T1+ theme(legend.position = "none")+ ggtitle("Day-10"),
@@ -1110,7 +1110,7 @@ dev.off()
 
 ### SUVA model plot
 
-```{r SUVA model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in SUVA with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r SUVA model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in SUVA with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 extract.legend <- get_legend(
   # create some space to the left of the legend
   DOC.T1.mod.plot + theme(legend.box.margin = margin(0, 0, 0, 10)))
@@ -1129,7 +1129,7 @@ ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
 
 ### SUVA diff plot
 
-```{r SUVA diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals.}
+```{r SUVA diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 
 suva.mod.diffs<-plot_grid(
   suva.diff.T1+ theme(legend.position = "none")+ ggtitle("SUVA - Day-10"),
@@ -1456,7 +1456,7 @@ dev.off()
 
 ### Sr model plot
 
-```{r Sr model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in Sr with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r Sr model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in Sr with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 sr.alltimes<-plot_grid(
   sr.T1.mod.plot+ theme(legend.position = "none"),
   sr.T2.mod.plot+ theme(legend.position = "none"),
@@ -1470,7 +1470,7 @@ ggsave("figures/sr.alltimes.mod.pdf", height=4, width=12)
 
 ### Sr diff plot
 
-```{r Sr diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals.}
+```{r Sr diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 
 sr.mod.diffs<-plot_grid(
   sr.diff.T1+ theme(legend.position = "none")+ ggtitle("Sr - Day-10"),
@@ -1794,7 +1794,7 @@ dev.off()
 ```
 
 ### HIX model plot
-```{r HIX model plot, fig.dim=c(13,5), fig.cap= **Figure**. Changes in HIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r HIX model plot, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in HIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
     hix.T2.mod.plot+ theme(legend.position = "none"),
@@ -1807,7 +1807,7 @@ ggsave("figures/hix.alltimes.mod.pdf", height=4, width=12)
 ```
 
 ### HIX diff plot
-```{r HIX diff plot, fig.dim=c(13,5), fig.cap= **Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals.}
+```{r HIX diff plot, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 hix.mod.diffs<-plot_grid(
   hix.diff.T1+ theme(legend.position = "none")+ ggtitle("HIX - Day-10"),
   hix.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2131,7 +2131,7 @@ dev.off()
 
 ### BIX model plot
 
-```{r Freshness model plots, fig.dim=c(13,5), fig.cap= **Figure**. Changes in BIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r Freshness model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in BIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 fr.alltimes<-plot_grid(
   fr.T1.mod.plot+ theme(legend.position = "none"),
     fr.T2.mod.plot+ theme(legend.position = "none"),
@@ -2144,7 +2144,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 ### BIX diff plot
-```{r Freshness diff plots, fig.dim=c(13,5), fig.cap= **Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals.}
+```{r Freshness diff plots, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
   fr.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2469,7 +2469,7 @@ dev.off()
 
 ### Fl model plot
 
-```{r Fl model plots, fig.dim=c(13,5), fig.cap= **Figure**. Changes in Fl with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r Fl model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in Fl with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 fl.alltimes<-plot_grid(
   fl.T1.mod.plot+ theme(legend.position = "none"),
     fl.T2.mod.plot+ theme(legend.position = "none"),
@@ -2483,7 +2483,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 
 ### Fl diff plot
 
-```{r Fl diff plots, fig.dim=c(13,5), fig.cap= **Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals.}
+```{r Fl diff plots, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 fl.mod.diffs<-plot_grid(
   fl.diff.T1+ theme(legend.position = "none")+ ggtitle("FI - Day-10"),
   fl.diff.T2+ theme(legend.position = "none")+ ggtitle("Day-31"),
@@ -2498,7 +2498,7 @@ ggsave("figures/fl.mod.diffs.pdf", height=4, width=12)
 ### Compile all indices into one plot
 This is a large 5 x 4 figure with all fluorescence and UV-vis absorbance indices across sampling time points.
 
-```{r All indices model plots, fig.dim=c(13,18), fig.cap= **Figure**. Changes in a: SUVA, b: spectral slope ratio, c: humification index, d: freshness index, and e: fluorescence index with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r All indices model plots, fig.dim=c(13,18), fig.cap= "**Figure**. Changes in a: SUVA, b: spectral slope ratio, c: humification index, d: freshness index, and e: fluorescence index with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 indices.alltimes= plot_grid(suva.alltimes, sr.alltimes, hix.alltimes, fr.alltimes, fl.alltimes, nrow=5, rel_widths = c(8,8,8,8,8), labels = "AUTO")
 
@@ -2902,7 +2902,7 @@ dev.off()
 ```
 
 ### UVBIO model plot
-```{r UVBIO model plots, fig.dim=c(13,5), fig.cap= **Figure**. Dissolved organic carbon (DOC) loss as percent change for burned (red) and unburned (green) treatments across plant biomass (g).  Each point represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r UVBIO model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Dissolved organic carbon (DOC) loss as percent change for burned (red) and unburned (green) treatments across plant biomass (g).  Each point represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 degra.mod.plots = plot_grid(
   photo.mod.plot + theme(legend.position = "none"),
@@ -3261,7 +3261,7 @@ dev.off()
 
 ### Sage and willow within treatment model plot
 
-```{r Sage and willow model plot, fig.dim=c(13,5), fig.cap= **Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r Sage and willow model plot, fig.dim=c(13,5), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 decomp.compare.mod.plot<-plot_grid(
 compare.burned.mod.plot+ theme(legend.position = "none"),
@@ -3347,7 +3347,7 @@ dev.off()
 ### Sage and willow combined plot
 We can combine the two decomposition plots into one. This is the same as the plot above but the code uses plot_grid to combine them into a 2x2 panel figure.
 
-```{r Sage and Willow plots, fig.dim=c(13,18), fig.cap= **Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement.}
+```{r Sage and Willow plots, fig.dim=c(13,18), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 ##### combine all plots
 all.decomp.mod.plot<-plot_grid(
