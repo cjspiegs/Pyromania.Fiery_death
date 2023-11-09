@@ -11,7 +11,7 @@ CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<s
 </p>
   
   
-The goal of the *Pyromania project* is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic mesocosms and ran the experiment for ~90d in 2021-2022. Photo credit: CJ Spiegel, CB Wall  
+The goal of the *Pyromania project* is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic experimental ponds and ran the experiment for ~90d in 2021-2022. Photo credit: CJ Spiegel, CB Wall  
   
 
 ## File Directory  
