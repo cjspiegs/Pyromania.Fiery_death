@@ -1,4 +1,7 @@
 ## Pyromania—Life After a Fiery Death: Fire and Plant Biomass Loading Affect Dissolved Organic Matter in Experimental Ponds
+
+<a href="https://zenodo.org/doi/10.5281/zenodo.10093520"><img src="https://zenodo.org/badge/601279458.svg" alt="DOI"></a>
+
 CJ Spiegel<sup>1</sup>, N Mladenov<sup>2</sup>, CB Wall<sup>1</sup>, K Hollman<sup>2</sup>, CH Tran<sup>1</sup>, CC Symons<sup>3</sup>, JB Shurin<sup>1</sup>. (2023) _Global Change Biology_.
 
 <sup>1</sup>University of California, San Diego   
