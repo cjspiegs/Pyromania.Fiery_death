@@ -143,7 +143,7 @@ DOC.df<- DOC.df %>%
 DOC.df$Treatment<-as.factor(DOC.df$Treatment)
 ```
 
-### DOC analysis
+#### DOC analysis
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make the five panel figure
@@ -403,7 +403,7 @@ dev.off()
 
 ```
 
-### DOC output
+#### DOC output
 
 This generates a table with GAM summaries
 ```{r DOC output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide' }
@@ -441,7 +441,7 @@ dev.off()
 
 ```
 
-### DOC model plot 
+#### DOC model plot 
 
 ```{r DOC model plot, fig.dim=c(13,7), fig.cap="**Figure**. Dissolved organic carbon (DOC) concentration across time in treatments receiving burned and unburned plant material at the start of the experiment and four sampling periods after plant material added. Black lines with gray confidence intervals indicate global smoothers across all data points; solid (burned) and dotted (unburned) black lines together represent treatment-level intercepts with global smoothers; colored lines indicate factor-smooths that vary between treatments."}
 
@@ -464,7 +464,7 @@ ggsave("figures/DOC.alltimes.mod.pdf", height=4, width=18)
 DOC.alltimes
 ```
 
-### DOC diff plot
+#### DOC diff plot
 
 From the GAMs, we can plot exactly where the differences lie. 
 ```{r DOC diff plot, fig.dim=c(13,5), fig.cap="**Figure**. Differences in dissolved organic carbon (DOC) concentration for fitted smooth functions between treatments (burned vs. unburned) across plant biomass. Difference in trends shown in red with approximate 95% confidence intervals."}
@@ -584,8 +584,8 @@ Import the data for fluorescence and UV-vis absorbance, and run a loop to clean 
 * Run model selection and produce plots for each index.
 * Compile all indices into one plot.
 
-### SUVA
-*SUVA*: the specific ultraviolet absorbance at 254 nm (SUVA254) is used as a proxy for DOM aromaticity (Weishaar et al. 2003).
+#### SUVA
+**SUVA**: the specific ultraviolet absorbance at 254 nm (SUVA254) is used as a proxy for DOM aromaticity (Weishaar et al. 2003).
 
 ```{r SUVA all times, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ###### SUVA Time point 0 
@@ -693,13 +693,13 @@ suva.df=rbind(suva.t0.df, suva.t1.df, suva.t2.df, suva.t3.df, suva.t4.df)
 ### Import the rest of the fluorescence and UV-vis absorbance data
 Below are brief descriptions of each index:
 
-*Sr*: the ratio of the slope (SR) parameters (S275-295:S350-400) as a proxy for molecular weight (MW) (Helms et al. 2008).
+**Sr**: the ratio of the slope (SR) parameters (S275-295:S350-400) as a proxy for molecular weight (MW) (Helms et al. 2008).
 
-*HIX*: the humification index (HIX = ratio of areas under the emission curve at 435-480 nm and 300-345 nm plus 435-480 nm at an excitation wavelength 245 nm) that described the degree of humification (high HIX = more terrestrial humic-like material) (Zsolnay et al. 1999).
+**HIX**: the humification index (HIX = ratio of areas under the emission curve at 435-480 nm and 300-345 nm plus 435-480 nm at an excitation wavelength 245 nm) that described the degree of humification (high HIX = more terrestrial humic-like material) (Zsolnay et al. 1999).
 
-*BIX*: the freshness index (BIX), representing the degree to which organic matter has undergone processing and degradation, as the ratio of emission intensity at 380 nm to the maximum emission intensity between 420 and 435 nm at excitation wavelength 310 nm (Parlanti 2000).
+**BIX**: the freshness index (BIX), representing the degree to which organic matter has undergone processing and degradation, as the ratio of emission intensity at 380 nm to the maximum emission intensity between 420 and 435 nm at excitation wavelength 310 nm (Parlanti 2000).
 
-*FI*: the fluorescence index (FI = emission intensity at 470 nm divided with that of 520 nm at 370 nm excitation) which indicated source material (microbial-precursor FI value ≈ 1.8 or terrestrial-precursor FI ≈ 1.3) (McKnight et al. 2001).
+**FI**: the fluorescence index (FI = emission intensity at 470 nm divided with that of 520 nm at 370 nm excitation) which indicated source material (microbial-precursor FI value ≈ 1.8 or terrestrial-precursor FI ≈ 1.3) (McKnight et al. 2001).
 
 ```{r other indicies, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 # Time 0
@@ -732,7 +732,7 @@ index.T4.df=index.T4.df[-c(7:11,13,14)]
 index.df=rbind(index.T0.df, index.T1.df, index.T2.df, index.T3.df, index.T4.df)
 ```
 
-### Add the fluroescence and UV-vis absorbance data back to original DOC df
+#### Add the fluroescence and UV-vis absorbance data back to original DOC df
 Now we will have all of our data in one single df.
 
 ```{r new DOC df, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -802,7 +802,7 @@ DOC.df=DOC.df%>%
 
 ```
 
-### SUVA analysis
+#### SUVA analysis
 We can model how SUVA changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -1073,7 +1073,7 @@ dev.off()
 
 ```
 
-### SUVA output
+#### SUVA output
 This generates a table of GAM summaries.
 
 ```{r SUVA output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -1111,7 +1111,7 @@ dev.off()
 
 ```
 
-### SUVA model plot
+#### SUVA model plot
 
 ```{r SUVA model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in SUVA with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 extract.legend <- get_legend(
@@ -1130,7 +1130,7 @@ suva.alltimes
 ggsave("figures/SUVA.alltimes.mod.pdf", height=4, width=12)
 ```
 
-### SUVA diff plot
+#### SUVA diff plot
 
 ```{r SUVA diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 
@@ -1145,7 +1145,7 @@ suva.mod.diffs
 ggsave("figures/suva.mod.diffs.pdf", height=4, width=12)
 ```
 
-### Sr analysis 
+#### Sr analysis 
 We can model how Sr changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -1419,7 +1419,7 @@ grid.table(AIC.sr.mod, rows=NULL)
 dev.off()
 ```
 
-### Sr output
+#### Sr output
 This generates a table GAM summaries.
 ```{r Sr output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -1457,7 +1457,7 @@ dev.off()
 
 ```
 
-### Sr model plot
+#### Sr model plot
 
 ```{r Sr model plots, fig.dim=c(13,5), fig.cap="**Figure**. Changes in Sr with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 sr.alltimes<-plot_grid(
@@ -1471,7 +1471,7 @@ sr.alltimes
 ggsave("figures/sr.alltimes.mod.pdf", height=4, width=12)
 ```
 
-### Sr diff plot
+#### Sr diff plot
 
 ```{r Sr diff plots, fig.dim=c(13,5), fig.cap="**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 
@@ -1486,7 +1486,7 @@ sr.mod.diffs
 ggsave("figures/sr.mod.diffs.pdf", height=4, width=12)
 ```
 
-### HIX analysis 
+#### HIX analysis 
 We can model how HIX changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -1757,7 +1757,7 @@ dev.off()
 
 ```
 
-### HIX output
+#### HIX output
 This generates a table with GAM summaries.
 
 ```{r HIX output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -1796,7 +1796,8 @@ grid.table(hix.mod.allsums, rows= NULL)
 dev.off()
 ```
 
-### HIX model plot
+#### HIX model plot
+
 ```{r HIX model plot, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in HIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 hix.alltimes<-plot_grid(
   hix.T1.mod.plot+ theme(legend.position = "none"),
@@ -1809,7 +1810,8 @@ hix.alltimes
 ggsave("figures/hix.alltimes.mod.pdf", height=4, width=12)
 ```
 
-### HIX diff plot
+#### HIX diff plot
+
 ```{r HIX diff plot, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 hix.mod.diffs<-plot_grid(
   hix.diff.T1+ theme(legend.position = "none")+ ggtitle("HIX - Day-10"),
@@ -1823,7 +1825,7 @@ ggsave("figures/hix.mod.diffs.pdf", height=4, width=12)
 ```
 
 
-### Freshness (BIX)  analysis
+#### Freshness (BIX)  analysis
 We can model how HIX changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -2064,7 +2066,7 @@ fr.T4.mod.plot<-
 
 ```
 
-### BIX output
+#### BIX output
 This generates a table with GAM summaries.
 ```{r Freshness output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -2132,7 +2134,7 @@ dev.off()
 
 ```
 
-### BIX model plot
+#### BIX model plot
 
 ```{r Freshness model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in BIX with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 fr.alltimes<-plot_grid(
@@ -2146,7 +2148,7 @@ fr.alltimes
 ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
-### BIX diff plot
+#### BIX diff plot
 ```{r Freshness diff plots, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
@@ -2159,7 +2161,7 @@ fr.mod.diffs
 ggsave("figures/fr.mod.diffs.pdf", height=4, width=12)
 ```
 
-### Fl analysis
+#### Fl analysis
 We can model how Fl changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -2431,7 +2433,7 @@ dev.off()
 
 ```
 
-### Fl output
+#### Fl output
 This generates a table with GAM summaries.
 
 ```{r Fl output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -2470,7 +2472,7 @@ dev.off()
 
 ```
 
-### Fl model plot
+#### Fl model plot
 
 ```{r Fl model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Changes in Fl with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 fl.alltimes<-plot_grid(
@@ -2484,7 +2486,7 @@ fl.alltimes
 ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
-### Fl diff plot
+#### Fl diff plot
 
 ```{r Fl diff plots, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 fl.mod.diffs<-plot_grid(
@@ -2710,7 +2712,7 @@ degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
 
 ```
 
-### UVBIO analysis
+#### UVBIO analysis
 We can model how UVBIO changes across the biomass gradient on Day 10.
 
 * First, run GAMs to see what is happening and where differences lie.  
@@ -2878,7 +2880,7 @@ r_squared_total
 ```
 
 
-### UVBIO output
+#### UVBIO output
 This generates a table with GAM summaries.
 ```{r UVBIO output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -2918,7 +2920,7 @@ dev.off()
 
 ```
 
-### UVBIO model plot
+#### UVBIO model plot
 ```{r UVBIO model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Dissolved organic carbon (DOC) loss as percent change for burned (red) and unburned (green) treatments across plant biomass (g).  Each point represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 degra.mod.plots = plot_grid(
@@ -3123,7 +3125,7 @@ dev.off()
 
 ```
 
-### Sage and willow output
+#### Sage and willow output
 This generates a table with GAM summaries.
 
 ```{r Sage and willow between output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -3162,7 +3164,7 @@ dev.off()
 
 ```
 
-### Sage and willow within treatment analysis
+#### Sage and willow within treatment analysis
 Above, we examined differences between plant types. We can take a closer look to see how sage and willow decomposition differed within fire treatment (i.e., differences between burned sage and willow, and unburned sage and willow).
 
 ```{r Sage and willow treatment analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
@@ -3295,7 +3297,7 @@ ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 ```
 
 
-### Sage and willow within treatment output
+#### Sage and willow within treatment output
 This generates a table with GAM summaries.
 ```{r Sage and willow within output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -3333,7 +3335,7 @@ dev.off()
 
 ```
 
-### Sage and willow combined output
+#### Sage and willow combined output
 This combines to outputs into a single table with GAM summaries.
 
 ```{r Sage and Willow combined output, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
@@ -3356,7 +3358,7 @@ dev.off()
 
 ```
 
-### Sage and willow combined plot
+#### Sage and willow combined plot
 We can combine the two decomposition plots into one so that we now have decomposition between and within fire treatment.
 
 ```{r Sage and Willow plots, fig.dim=c(13,10), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
