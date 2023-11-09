@@ -15,7 +15,7 @@ output:
       chunk_output_type: console
 ---
 ### Project overview
-The goal of the Pyromania project is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic mesocosms and ran the experiment for ~90d in 2021-2022.   
+The goal of the Pyromania project is to test how terrestrial subsides (plant biomass loading) and burning influence DOM composition and degradation. We used a manipulative experiment to assess a range of plant material quantities (0-400g per tank) and fire treatment (burned vs unburned material) and the non-linearity of these effects on aquatic systems through 4 time-point samplings. We used 400L aquatic experimental ponds and ran the experiment for ~90d in 2021-2022.   
 
 <center>  
   
@@ -24,13 +24,13 @@ The goal of the Pyromania project is to test how terrestrial subsides (plant bio
 </center>  
   
 
-**DATA SETS**  
-This data set is among 3 to be generated for the project and focuses on:  
+**DATASETS**  
+This dataset is among 3 to be generated for the project and focuses on:  
 
-(1) **dissolved organic carbon** (DOC) and  
+(1) **Dissolved organic carbon** (DOC) and  
 (2) **Fluorescence and UV-vis spectroscopic absorbance** indices  
 (3) **DOC Degradation** from either photo- or microbial decomposition 
-(4) **plant biomass decomposition** as % mass loss
+(4) **Plant biomass decomposition** as % mass loss
 
 **TIME POINTS**  
 
@@ -79,13 +79,13 @@ Factor-smooth interaction also an option, this is when s(x1 by = fac), this sets
 
 EDF - effective degrees of freedom, equate with wiggliness, with edf =1 as a straight line, and higher edfs as more wiggly. GAM smoother significance is described as not being able to draw a horizontal line through the data. Always check concurvity, which is the collinearity with models from 0-1.
 
-### Import DOC files
+### Import DOC data
+
 Import the data for DOC and run a loop to clean up all files. This creates a single dataframe (df) by taking the raw data files, aligning metadata, and filtering to make a clean df for GAMs. 
 
 * Analyze DOC at each sampling time point.  
 * Run model selection and produce plots for each individual timepoint
 * Graph the timepoints as a 5 panel figure.  
-
 ```{r DOC import, collapse=TRUE, result='hide'}
 ## import treatment IDs
 IDs<-read.csv("data/treatment.IDs.csv")
@@ -481,112 +481,29 @@ ggsave("figures/DOC.mod.diffs.pdf", height=4, width=16)
 
 ```
 
-### Import all UVBIO files
-Import the data for UVBIO (data from the in situ incubations) and run a loop to clean up all files. This creates a single dataframe (df) by taking the raw data files, aligning metadata, and filtering to make a clean df for GAMs. 
+### Import fluorescence and UV-vis absorbance data 
 
-* Later, we will analyze % DOC change from the incubations at Day 10.  
-* Run model selection and produce plots for each degradation pathway (UV-only, Microbes-only, UV and Microbes).
-* Plot the UVBIO data.
-
-```{r UVBIO, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
-##### grab files in a list
-UVBio.files <- list.files(path="/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/UVBIO", pattern = "csv$", full.names = T)
-UVBio.files
-
-##### what are the file names, sans extensions using package 'tools'
-file.names<-file_path_sans_ext(list.files(path="/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/UVBIO", pattern = "csv$", full.names = F))
-file.names
-
-
-############ formatting all data in for loop
-  for(i in 1:length(UVBio.files))
-    {
-  data<-read.csv(UVBio.files[i], sep=",") #skip 13 rows where standards are
-  data<-data[,c(1,3,4)] # removed columns we don't need
-  data$File<-UVBio.files[i]
-  colnames(data)<-c("Tank", "DOC..mg.L", "TN..mg.L", "File") 
-  data$Tank<-as.character(data$Tank)
-  data$Treatment<-IDs$Treatment # add treatment info
-  data$plant.mass..g<-IDs$plant.mass..g # add plant biomass info
-  make.names(assign(paste(file.names[i], sep=""), data)) # make the file name the name of new df for loop df
-  }
-########## this is the end of the loop
-
-ls() #see all dfs you've made, the above will be df matching their file names
-
-#Combine files from loop to single df
-UVBIO.df<-rbind(DOC_NoUV_T1, DOC_UV_T1, DOC_NoUV_T2, DOC_UV_T2, DOC_NoUV_T3, DOC_UV_T3)
-
-# make new factors for filtered (F/NF) and UV (+/-)
-# ** caution! Make sure this matches sheet layout after the loop!
-
-UVBIO.df$Filter.Trt<-rep(c("Filtered", "Unfiltered"), each=30) # repeat 30 times
-UVBIO.df$UV.Trt<-rep(c("NoUV", "UV"), each=60) # repeat 60 times
-
-# check tank names in DF and make sure they are what you think they are (i.e 1-30 but w/ weird names)
-Tank.fix<-rep(c(1:30), times=12) # repeat 12 times to fix all the strange tank names 
-
-#compare tank IDS
-df.test<-cbind(Tank.fix, UVBIO.df$Tank) # yep!
-
-UVBIO.df$Tank<-as.factor(Tank.fix) #replace old tank names
-
-# extract out the file names
-#Extract file
-UVBIO.df$File=sapply(strsplit(UVBIO.df$File, "/"), `[`, 9)
-#take out redundancies
-UVBIO.df$DOC..mg.L<-gsub("NPOC:","", UVBIO.df$DOC..mg.L)
-UVBIO.df$DOC..mg.L<- gsub("mg/L", "", UVBIO.df$DOC..mg.L)
-UVBIO.df$TN..mg.L<-gsub("TN:","", UVBIO.df$TN..mg.L)
-UVBIO.df$TN..mg.L<- gsub("mg/L", "", UVBIO.df$TN..mg.L)
-
-#convert DOC and TN to numeric
-UVBIO.df$DOC..mg.L<-as.numeric(as.character(UVBIO.df$DOC..mg.L))
-UVBIO.df$TN..mg.L<- as.numeric(as.character(UVBIO.df$TN..mg.L))
-
-# add a time point
-# if equals DOC_UV_T1_111721 then, T1, if not then "nothing"
-UVBIO.df$Time.point<- as.factor(ifelse(UVBIO.df$File=="DOC_UV_T1.csv", "T1",
-  ifelse(UVBIO.df$File=="DOC_NoUV_T1.csv", "T1",
-          ifelse(UVBIO.df$File=="DOC_UV_T2.csv", "T2",
-                ifelse(UVBIO.df$File=="DOC_NoUV_T2.csv", "T2", "T3")))))
-
-#rearrange
-UVBIO.df<- UVBIO.df %>% 
-  dplyr::select(File, Time.point, Treatment, Filter.Trt, UV.Trt, Tank, plant.mass..g, DOC..mg.L, TN..mg.L)
-
-
-# make levels for plotting and stats
-# add in starting DOC and TN
-# original data is... DOC_T0, DOC_T1, DOC_T2, DOC_T3, DOC_T4 -- but no need for DOC T0 and T4
-# repeat 4x to account for the 4 treatments in each tank
-DOC_T1.start<-rep(DOC_T1$DOC..mg.L, times=4)
-DOC_T2.start<-rep(DOC_T2$DOC..mg.L, times=4)
-DOC_T3.start<-rep(DOC_T3$DOC..mg.L, times=4)
-
-TN_T1.start<-rep(DOC_T1$TN..mg.L, times=4)
-TN_T2.start<-rep(DOC_T2$TN..mg.L, times=4)
-TN_T3.start<-rep(DOC_T3$TN..mg.L, times=4)
-
-# compile and add in as a new column
-UVBIO.df$Start.DOC<-c(DOC_T1.start, DOC_T2.start, DOC_T3.start)
-UVBIO.df$Start.TN<-c(TN_T1.start, TN_T2.start, TN_T3.start)
-
-UVBIO.df$Burn.Filt.UV<-interaction(UVBIO.df$Treatment, UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
-UVBIO.df$Filt.UV<-interaction(UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
-
-```
-
-### Import fluorescence and UV-vis absorbance index files. 
 Import the data for fluorescence and UV-vis absorbance, and run a loop to clean up all files. This creates a single dataframe (df) by taking the raw data files, aligning metadata, and filtering to make a clean df for GAMs. 
 
-*We will analyze fluorescence and UV-vis absorbance across the biomass gradient at each sampling time point.
+* We will analyze fluorescence and UV-vis absorbance across the biomass gradient at each sampling time point.
 * Run model selection and produce plots for each index.
 * Compile all indices into one plot.
 
-#### SUVA
+Below are brief descriptions of each index:
+
 **SUVA**: the specific ultraviolet absorbance at 254 nm (SUVA254) is used as a proxy for DOM aromaticity (Weishaar et al. 2003).
 
+**Sr**: the ratio of the slope (SR) parameters (S275-295:S350-400) as a proxy for molecular weight (MW) (Helms et al. 2008).
+
+**HIX**: the humification index (HIX = ratio of areas under the emission curve at 435-480 nm and 300-345 nm plus 435-480 nm at an excitation wavelength 245 nm) that described the degree of humification (high HIX = more terrestrial humic-like material) (Zsolnay et al. 1999).
+
+**BIX**: the freshness index (BIX), representing the degree to which organic matter has undergone processing and degradation, as the ratio of emission intensity at 380 nm to the maximum emission intensity between 420 and 435 nm at excitation wavelength 310 nm (Parlanti 2000).
+
+**FI**: the fluorescence index (FI = emission intensity at 470 nm divided with that of 520 nm at 370 nm excitation) which indicated source material (microbial-precursor FI value ≈ 1.8 or terrestrial-precursor FI ≈ 1.3) (McKnight et al. 2001).
+
+#### Import SUVA data
+
+These files are uploaded separately.
 ```{r SUVA all times, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ###### SUVA Time point 0 
 
@@ -690,16 +607,7 @@ suva.t4.df$SUVA=(suva.t4.df[suva.t4.df$Tank,]$abs254/suva.t4.df[suva.t4.df$Tank,
 suva.df=rbind(suva.t0.df, suva.t1.df, suva.t2.df, suva.t3.df, suva.t4.df)
 ```
 
-### Import the rest of the fluorescence and UV-vis absorbance data
-Below are brief descriptions of each index:
-
-**Sr**: the ratio of the slope (SR) parameters (S275-295:S350-400) as a proxy for molecular weight (MW) (Helms et al. 2008).
-
-**HIX**: the humification index (HIX = ratio of areas under the emission curve at 435-480 nm and 300-345 nm plus 435-480 nm at an excitation wavelength 245 nm) that described the degree of humification (high HIX = more terrestrial humic-like material) (Zsolnay et al. 1999).
-
-**BIX**: the freshness index (BIX), representing the degree to which organic matter has undergone processing and degradation, as the ratio of emission intensity at 380 nm to the maximum emission intensity between 420 and 435 nm at excitation wavelength 310 nm (Parlanti 2000).
-
-**FI**: the fluorescence index (FI = emission intensity at 470 nm divided with that of 520 nm at 370 nm excitation) which indicated source material (microbial-precursor FI value ≈ 1.8 or terrestrial-precursor FI ≈ 1.3) (McKnight et al. 2001).
+#### Import the rest of the fluorescence and UV-vis absorbance data
 
 ```{r other indicies, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 # Time 0
@@ -732,9 +640,9 @@ index.T4.df=index.T4.df[-c(7:11,13,14)]
 index.df=rbind(index.T0.df, index.T1.df, index.T2.df, index.T3.df, index.T4.df)
 ```
 
-#### Add the fluroescence and UV-vis absorbance data back to original DOC df
-Now we will have all of our data in one single df.
+#### Add indices to original DOC df
 
+Now we will have all of our data in one single df.
 ```{r new DOC df, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 #import and do a loop to clean up all files and make stacked data in single df
 DOC_T0$SUVA=suva.df[suva.df$Time.point=="T0",]$SUVA
@@ -803,11 +711,11 @@ DOC.df=DOC.df%>%
 ```
 
 #### SUVA analysis
+
 We can model how SUVA changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for SUVA.
-
 ```{r SUVA analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.SUVA.T0.gam=gam(SUVA ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
@@ -1074,8 +982,8 @@ dev.off()
 ```
 
 #### SUVA output
-This generates a table of GAM summaries.
 
+This generates a table of GAM summaries.
 ```{r SUVA output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 suva.para.sums=as.data.frame(rbind(T1.suva.anova$pTerms.table, T2.suva.anova$pTerms.table, T3.suva.anova$pTerms.table, T4.suva.anova$pTerms.table))
@@ -1146,11 +1054,11 @@ ggsave("figures/suva.mod.diffs.pdf", height=4, width=12)
 ```
 
 #### Sr analysis 
+
 We can model how Sr changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for Sr.
-
 ```{r Sr analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.sr.T0.gam=gam(sr ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
@@ -1420,6 +1328,7 @@ dev.off()
 ```
 
 #### Sr output
+
 This generates a table GAM summaries.
 ```{r Sr output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -1487,11 +1396,11 @@ ggsave("figures/sr.mod.diffs.pdf", height=4, width=12)
 ```
 
 #### HIX analysis 
+
 We can model how HIX changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for HIX.
-
 ```{r HIX analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ######## T0 model
 m1.hix.T0.gam=gam(hix ~ Treatment + s(plant.mass..g, by= Treatment), subset = Time.point=="T0", data = DOC.df, method = "REML")
@@ -1758,8 +1667,8 @@ dev.off()
 ```
 
 #### HIX output
-This generates a table with GAM summaries.
 
+This generates a table with GAM summaries.
 ```{r HIX output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 hix.para.sums=as.data.frame(rbind(T1.hix.anova$pTerms.table, T2.hix.anova$pTerms.table, T3.hix.anova$pTerms.table, T4.hix.anova$pTerms.table))
@@ -1825,8 +1734,9 @@ ggsave("figures/hix.mod.diffs.pdf", height=4, width=12)
 ```
 
 
-#### Freshness (BIX)  analysis
-We can model how HIX changes across the biomass gradient and over time.
+#### BIX analysis
+
+We can model how BIX changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for BIX.
@@ -2067,6 +1977,7 @@ fr.T4.mod.plot<-
 ```
 
 #### BIX output
+
 This generates a table with GAM summaries.
 ```{r Freshness output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -2149,6 +2060,7 @@ ggsave("figures/fr.alltimes.mod.pdf", height=4, width=12)
 ```
 
 #### BIX diff plot
+
 ```{r Freshness diff plots, fig.dim=c(13,5), fig.cap= "**Figure**. Differences between fitted smooth functions for the fire treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 fr.mod.diffs<-plot_grid(
   fr.diff.T1+ theme(legend.position = "none")+ ggtitle("FR - Day-10"),
@@ -2162,11 +2074,11 @@ ggsave("figures/fr.mod.diffs.pdf", height=4, width=12)
 ```
 
 #### Fl analysis
+
 We can model how Fl changes across the biomass gradient and over time.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for Fl.
-
 ```{r Fl analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 library(mgcv)
 library(tidymv)
@@ -2434,8 +2346,8 @@ dev.off()
 ```
 
 #### Fl output
-This generates a table with GAM summaries.
 
+This generates a table with GAM summaries.
 ```{r Fl output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 fl.para.sums=as.data.frame(rbind(T1.fl.anova$pTerms.table, T2.fl.anova$pTerms.table, T3.fl.anova$pTerms.table, T4.fl.anova$pTerms.table))
@@ -2500,9 +2412,9 @@ fl.mod.diffs
 ggsave("figures/fl.mod.diffs.pdf", height=4, width=12)
 ```
 
-### All indices model plot
-This is a large 5 x 4 figure with all fluorescence and UV-vis absorbance indices across sampling time points.
+#### All indices model plot
 
+This is a large 5 x 4 figure with all fluorescence and UV-vis absorbance indices across sampling time points.
 ```{r All indices model plots, fig.dim=c(13,18), fig.cap= "**Figure**. Changes in a: SUVA, b: spectral slope ratio, c: humification index, d: freshness index, and e: fluorescence index with increasing plant biomass for the burned (red) and unburned (green) treatments.  Each dot represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 indices.alltimes= plot_grid(suva.alltimes, sr.alltimes, hix.alltimes, fr.alltimes, fl.alltimes, nrow=5, rel_widths = c(8,8,8,8,8), labels = "AUTO")
@@ -2529,7 +2441,7 @@ ggsave("figures/day0_index.baseline.plot.pdf", height=18, width=14)
 ```
 
 
-### All indices diff plot
+#### All indices diff plot
 
 ```{r All indices diff plots, fig.dim=c(13,18), fig.cap= "**Figure**.Differences between fitted smooth functions for the treatments (difference in trends; solid lines) for fluorescence and UV-vis absorbance indices shown in red with approximate 95% confidence intervals."}
 
@@ -2542,11 +2454,106 @@ ggsave("figures/indices.diff.plot.pdf", height=18, width=14)
 ```
 
 
+### Import UVBIO data
+
+Import the data for UVBIO (data from the in situ incubations) and run a loop to clean up all files. This creates a single df by taking the raw data files, aligning metadata, and filtering to make a clean df for GAMs. 
+
+* We will analyze % DOC change from the incubations at Day 10.  
+* Run model selection and produce plots for each degradation pathway (UV-only, Microbes-only, UV and Microbes).
+* Plot the UVBIO data.
+```{r UVBIO, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
+##### grab files in a list
+UVBio.files <- list.files(path="/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/UVBIO", pattern = "csv$", full.names = T)
+UVBio.files
+
+##### what are the file names, sans extensions using package 'tools'
+file.names<-file_path_sans_ext(list.files(path="/Users/Cody1/Desktop/GitHub/Pyromania.Fiery_death/data/UVBIO", pattern = "csv$", full.names = F))
+file.names
 
 
-### Create UVBIO df
-Since we initially imported the UVBIO files, we can now create a unqiue df for each degradation pathway and merge them: photo.df = UV-only, microbes.df= microbes-only, total.df= UV and microbes. The degra.df now contains all 3 pathways.
+############ formatting all data in for loop
+  for(i in 1:length(UVBio.files))
+    {
+  data<-read.csv(UVBio.files[i], sep=",") #skip 13 rows where standards are
+  data<-data[,c(1,3,4)] # removed columns we don't need
+  data$File<-UVBio.files[i]
+  colnames(data)<-c("Tank", "DOC..mg.L", "TN..mg.L", "File") 
+  data$Tank<-as.character(data$Tank)
+  data$Treatment<-IDs$Treatment # add treatment info
+  data$plant.mass..g<-IDs$plant.mass..g # add plant biomass info
+  make.names(assign(paste(file.names[i], sep=""), data)) # make the file name the name of new df for loop df
+  }
+########## this is the end of the loop
 
+ls() #see all dfs you've made, the above will be df matching their file names
+
+#Combine files from loop to single df
+UVBIO.df<-rbind(DOC_NoUV_T1, DOC_UV_T1, DOC_NoUV_T2, DOC_UV_T2, DOC_NoUV_T3, DOC_UV_T3)
+
+# make new factors for filtered (F/NF) and UV (+/-)
+# ** caution! Make sure this matches sheet layout after the loop!
+
+UVBIO.df$Filter.Trt<-rep(c("Filtered", "Unfiltered"), each=30) # repeat 30 times
+UVBIO.df$UV.Trt<-rep(c("NoUV", "UV"), each=60) # repeat 60 times
+
+# check tank names in DF and make sure they are what you think they are (i.e 1-30 but w/ weird names)
+Tank.fix<-rep(c(1:30), times=12) # repeat 12 times to fix all the strange tank names 
+
+#compare tank IDS
+df.test<-cbind(Tank.fix, UVBIO.df$Tank) # yep!
+
+UVBIO.df$Tank<-as.factor(Tank.fix) #replace old tank names
+
+# extract out the file names
+#Extract file
+UVBIO.df$File=sapply(strsplit(UVBIO.df$File, "/"), `[`, 9)
+#take out redundancies
+UVBIO.df$DOC..mg.L<-gsub("NPOC:","", UVBIO.df$DOC..mg.L)
+UVBIO.df$DOC..mg.L<- gsub("mg/L", "", UVBIO.df$DOC..mg.L)
+UVBIO.df$TN..mg.L<-gsub("TN:","", UVBIO.df$TN..mg.L)
+UVBIO.df$TN..mg.L<- gsub("mg/L", "", UVBIO.df$TN..mg.L)
+
+#convert DOC and TN to numeric
+UVBIO.df$DOC..mg.L<-as.numeric(as.character(UVBIO.df$DOC..mg.L))
+UVBIO.df$TN..mg.L<- as.numeric(as.character(UVBIO.df$TN..mg.L))
+
+# add a time point
+# if equals DOC_UV_T1_111721 then, T1, if not then "nothing"
+UVBIO.df$Time.point<- as.factor(ifelse(UVBIO.df$File=="DOC_UV_T1.csv", "T1",
+  ifelse(UVBIO.df$File=="DOC_NoUV_T1.csv", "T1",
+          ifelse(UVBIO.df$File=="DOC_UV_T2.csv", "T2",
+                ifelse(UVBIO.df$File=="DOC_NoUV_T2.csv", "T2", "T3")))))
+
+#rearrange
+UVBIO.df<- UVBIO.df %>% 
+  dplyr::select(File, Time.point, Treatment, Filter.Trt, UV.Trt, Tank, plant.mass..g, DOC..mg.L, TN..mg.L)
+
+
+# make levels for plotting and stats
+# add in starting DOC and TN
+# original data is... DOC_T0, DOC_T1, DOC_T2, DOC_T3, DOC_T4 -- but no need for DOC T0 and T4
+# repeat 4x to account for the 4 treatments in each tank
+DOC_T1.start<-rep(DOC_T1$DOC..mg.L, times=4)
+DOC_T2.start<-rep(DOC_T2$DOC..mg.L, times=4)
+DOC_T3.start<-rep(DOC_T3$DOC..mg.L, times=4)
+
+TN_T1.start<-rep(DOC_T1$TN..mg.L, times=4)
+TN_T2.start<-rep(DOC_T2$TN..mg.L, times=4)
+TN_T3.start<-rep(DOC_T3$TN..mg.L, times=4)
+
+# compile and add in as a new column
+UVBIO.df$Start.DOC<-c(DOC_T1.start, DOC_T2.start, DOC_T3.start)
+UVBIO.df$Start.TN<-c(TN_T1.start, TN_T2.start, TN_T3.start)
+
+UVBIO.df$Burn.Filt.UV<-interaction(UVBIO.df$Treatment, UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
+UVBIO.df$Filt.UV<-interaction(UVBIO.df$Filter.Trt, UVBIO.df$UV.Trt)
+
+```
+
+
+#### Create UVBIO df
+
+Since we initially imported the UVBIO files, we can now create a unique df for each degradation pathway and merge them: photo.df = UV-only, microbes.df= microbes-only, total.df= UV and microbes. The degra.df now contains all 3 pathways.
 ```{r UVBIO import, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 #+UV/+Bio=A
 #-UV/+Bio=B
@@ -2713,11 +2720,11 @@ degra_t1.unburned.df=degra_t1.df[degra_t1.df$Treatment=="unburned",]
 ```
 
 #### UVBIO analysis
+
 We can model how UVBIO changes across the biomass gradient on Day 10.
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for UVBIO.
-
 ```{r UVBIO analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 library(mgcv)
 
@@ -2881,6 +2888,7 @@ r_squared_total
 
 
 #### UVBIO output
+
 This generates a table with GAM summaries.
 ```{r UVBIO output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -2921,6 +2929,7 @@ dev.off()
 ```
 
 #### UVBIO model plot
+
 ```{r UVBIO model plots, fig.dim=c(13,5), fig.cap= "**Figure**. Dissolved organic carbon (DOC) loss as percent change for burned (red) and unburned (green) treatments across plant biomass (g).  Each point represents a different pond. Plots with a single smooth (global) indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 degra.mod.plots = plot_grid(
@@ -2936,12 +2945,12 @@ ggsave("figures/degra.mod.plots.pdf", height=4, width=10)
 
 ```
 
-### Import and analyze sage and willow decomposition data
+### Import sage and willow decomposition data
+
 Plant material for the starting material (sage or willow). This is useful in determining how fire impacted decomposition of particulate detritus. 
 
 * First, run GAMs to see what is happening and where differences lie.  
 * We will then make a plot for sage and willow within and between treatments.
-  
 ```{r Sage and willow analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 #load file
 plant.df=read.csv("/Users/Cody1/Desktop/GitHub/Pyromania2/data/decomp.weights.csv")
@@ -3126,8 +3135,8 @@ dev.off()
 ```
 
 #### Sage and willow output
-This generates a table with GAM summaries.
 
+This generates a table with GAM summaries.
 ```{r Sage and willow between output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
 decomp.para.sums=as.data.frame(rbind(sage.anova$pTerms.table, willow.anova$pTerms.table))
@@ -3165,8 +3174,8 @@ dev.off()
 ```
 
 #### Sage and willow within treatment analysis
-Above, we examined differences between plant types. We can take a closer look to see how sage and willow decomposition differed within fire treatment (i.e., differences between burned sage and willow, and unburned sage and willow).
 
+Above, we examined differences between plant types. We can take a closer look to see how sage and willow decomposition differed within fire treatment (i.e., differences between burned sage and willow, and unburned sage and willow).
 ```{r Sage and willow treatment analysis, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 #compare mass loss between sage and willow by fire treatment---burned
 m1.compare.burned.gam=gam(perc.loss ~ plant.type + s(plant.specific.mass..g, by=plant.type), data=plant.df2, methods= "REML", select= T, subset= treatment == "burned")
@@ -3298,6 +3307,7 @@ ggsave("figures/decomp.mod.plot.pdf", height=4, width=12)
 
 
 #### Sage and willow within treatment output
+
 This generates a table with GAM summaries.
 ```{r Sage and willow within output, fig.show='hide', message=FALSE, collapse=TRUE, results='hide'}
 ####Parametric output
@@ -3336,8 +3346,8 @@ dev.off()
 ```
 
 #### Sage and willow combined output
-This combines to outputs into a single table with GAM summaries.
 
+This combines to outputs into a single table with GAM summaries.
 ```{r Sage and Willow combined output, results='hide', fig.show='hide', message =FALSE, collapse=TRUE}
 library(gridExtra)
 #merge all the dataframes
@@ -3359,9 +3369,9 @@ dev.off()
 ```
 
 #### Sage and willow combined plot
-We can combine the two decomposition plots into one so that we now have decomposition between and within fire treatment.
 
-```{r Sage and Willow plots, fig.dim=c(13,10), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss between sage (purple) and willow (brown) within treatments. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
+We can combine the two decomposition plots into one so that we now have decomposition between and within fire treatment.
+```{r Sage and Willow plots, fig.dim=c(13,10), fig.cap= "**Figure**. Sage and willow percent mass loss across the plant biomass gradient at the end of 89 days. Mass loss for sage and willow between burned (red) and unburned (green) treatments. Mass loss between sage (purple) and willow (brown) within treatments. Each point represents a different pond. Plots with a single global smooth indicate that a model with one fit line for the burned and unburned treatments best describes the data, while separate smooths indicate that a model with different fits for the two treatments showed best agreement."}
 
 ##### combine all plots
 all.decomp.mod.plot<-plot_grid(
